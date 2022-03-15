@@ -1,0 +1,7 @@
+{
+  "name": "OrderHere",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
