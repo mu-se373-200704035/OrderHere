@@ -3,9 +3,9 @@ Digital menu - ordering mobile client/server app built with Ionic Framework and 
 
 ## Requirements
 ### Server
-    • Restaurant table in the database -> restaurant info
-    • Menu table with TitleIDs and for each title in the menu, another table.
-    • Tables table in the database with OrdersTable unique for each table.
+    • Shops table in the database -> restaurant info
+    • Menu with item types and items listed.
+    • Tables and related orders.
     • Requests table in the database. -> tableNo, purpose of the request(help/checkout).
     • User type waiter(admin) sign up and sign in functionality.
     • If the table is available, function to change the owner to the customer's randomly generated id.
@@ -20,7 +20,7 @@ Digital menu - ordering mobile client/server app built with Ionic Framework and 
     > Pages will be rendered based on authentication and authorization.
     >> ( only logged in admins are allowed to see or do the things below )
 
-    • ( for admins ) see tables grid, current(not yet completed) orders and waiter requests.
+    • ( for admins ) see tables grid, current orders and waiter requests.
     • ( for admins ) functions to manipulate the menu.
     • ( for admins ) function to complete or cancel the orders.
     • ( for admins ) function to manipulate table information such as ( owned, reserved, empty/available).
