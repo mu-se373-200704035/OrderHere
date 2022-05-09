@@ -22,7 +22,7 @@ interface Item{
 const Order = () => {
   
   const axios: any = require("axios").default;
-  const rootURL = "http://127.0.0.1:3000";
+  const rootURL = "https://orderhere.herokuapp.com";
   const {selectedShop} = useContext(MainContext);
   const [items, setItems] = React.useState<Item[]>([]);
   async function getSelectedShopItems() {

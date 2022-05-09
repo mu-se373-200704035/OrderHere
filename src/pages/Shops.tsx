@@ -8,7 +8,7 @@ import ShopList from '../components/ShopList';
 const Shops = () => {
   
   const axios: any = require("axios").default;
-  const rootURL = "http://127.0.0.1:3000";
+  const rootURL = "https://orderhere.herokuapp.com";
 
   const [shops, setShops] = React.useState([]);
 
