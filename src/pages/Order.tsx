@@ -7,24 +7,21 @@ import { MainContext, useContext } from "../components/Context";
 import Item from "../components/Item";
 import ShopCard from "../components/ShopCard";
 import Searchbar from "../components/Searchbar";
+import OrderSlider from "../components/OrderSlider";
+//interfaces
+import IItem from "../interfaces/IItem";
+import IOrder from "../interfaces/IOrder";
 
-interface Item{
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  shop: string;
-  item_type: string;
-  created_at: string;
-  updated_at: string;
-}
+
 
 const Order = () => {
   
   const axios: any = require("axios").default;
   const rootURL = "https://orderhere.herokuapp.com";
   const {selectedShop} = useContext(MainContext);
-  const [items, setItems] = React.useState<Item[]>([]);
+  const [items, setItems] = React.useState<IItem[]>([]);
+  const [orders, setOrders] = React.useState<IOrder[]>([]);
+
   async function getSelectedShopItems() {
     try {
       const { data, status } = await axios.get(rootURL+"/shops/"+selectedShop+"/items");
@@ -94,6 +91,8 @@ const Order = () => {
           </IonToolbar>
         </IonHeader>
         
+        <OrderSlider orders={orders}
+                     setOrders={setOrders}/>
         <ShopCard name={items[0] && items[0].shop}/>
         <h1 className="menu">menu</h1>
         <Searchbar placeholder="search for items"/>
