@@ -3,6 +3,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import React from 'react';
 import { nanoid } from "nanoid";
 import { MainContext, useContext } from "../components/Context";
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 //components
 import Item from "../components/Item";
 import ShopCard from "../components/ShopCard";
@@ -63,12 +64,12 @@ const Order = () => {
           name={item.name}
           price= {item.price}
           description={item.description} />
-        )
-      }
-      return;
-    })
-
-    return(
+          )
+        }
+        return;
+      })
+      
+      return(
         <div key={nanoid()}>
             <h2 className="item-type-title">
             {itemType}
@@ -76,15 +77,64 @@ const Order = () => {
             {itemsOfItemType}
         </div>
     )
-})
+  })
+  
+const [scanning, setScanning] = React.useState(false);
+const [qrCode, setQrCode] = React.useState<any>(null);
+  
+const startScan = async () => {
+  BarcodeScanner.hideBackground(); // make background of WebView transparent
+  document.body.style.background = "transparent";
+  const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
+
+  // if the result has content
+  if (result.hasContent) {
+    setQrCode(result.content);
+  }else{
+    setQrCode("NO CODE DETECTED");
+  }
+};
+
+const checkPermission = async () => {
+  // check or request permission
+  const status = await BarcodeScanner.checkPermission({ force: true });
+
+  if (status.granted) {
+    // the user granted permission
+    return true;
+  }
+
+  return false;
+};
+
+function scanQRCode(){
+  setScanning(true);
+  checkPermission().then(function(res){
+      res && startScan();
+  });
+}
+
+function processQrCode(){
+  const shop_table = qrCode.split(qrCode.split("-"));
+  // make request to claim the table
+
+  //local Storage needed
+}
+
+React.useEffect(()=>{
+  if(qrCode)
+    setScanning(prev=>!prev);
+},[qrCode]);
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order</IonTitle>
+          <button className="scan" slot="end" onClick={scanQRCode}>Scan QR</button>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen hidden={scanning}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Order</IonTitle>
@@ -94,6 +144,7 @@ const Order = () => {
         <OrderSlider orders={orders}
                      setOrders={setOrders}/>
         <ShopCard name={items[0] && items[0].shop}/>
+        {qrCode && <h3>{qrCode}</h3>}
         <h1 className="menu">menu</h1>
         <Searchbar placeholder="search for items"/>
         {itemsList}

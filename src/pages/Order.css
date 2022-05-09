@@ -8,3 +8,11 @@
     font-weight: bold;
     padding-left: .4em;
 }
+.scan{
+    padding: 1em;
+}
+.qrcode{
+    color: red;
+    font-weight: bold;
+    font-size: 1em;
+}
