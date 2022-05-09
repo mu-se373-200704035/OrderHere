@@ -4,23 +4,23 @@
     margin: .2em auto;
     background: rgba(255, 237, 255, 0.419);
     border-radius: 10px;
+    padding: .5em;
 }
 .item-topline{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .item-name{
-    font-size: 1.2rem;
-    margin-top: .5em;
-    margin-left: .5em;
+    font-size: 1rem;
+    margin: 0;
 }
 .item-price{
-    font-size: 1.2rem;
-    margin-top: .5em;
-    margin-right: .5em;
+    font-size: 1rem;
+    margin: 0;
 }
 .item-desc{
-    font-size: .75rem;
-    margin-left: .5em;
-    margin-top:0;
+    font-size: .7rem;
+    margin: 0;
+    margin-top: .5em;
 }
