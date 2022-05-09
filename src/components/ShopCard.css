@@ -1,0 +1,13 @@
+.shop-card{
+    width:98%;
+    height:8em;
+    background: #E5E5E5;
+    padding-left:.8em;
+    padding-top: .05em;
+    margin: .5em auto;
+    border-radius: 10px;
+}
+.shop-name{
+    font-size: 1.2em;
+    font-weight: bold;
+}
