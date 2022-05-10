@@ -30,14 +30,15 @@ setupIonicReact();
 const App: React.FC = () => {
   
   const [selectedShop, setSelectedShop] = React.useState<number>();
-  
-  const shopData:any = {
+  const rootURL = "https://orderhere.herokuapp.com";
+  const data:any = {
     selectedShop,
-    setSelectedShop
+    setSelectedShop,
+    rootURL
   }
 
   return(
-    <MainContext.Provider value={shopData}>
+    <MainContext.Provider value={data}>
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
