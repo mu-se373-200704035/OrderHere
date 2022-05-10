@@ -18,7 +18,7 @@ import IOrder from "../interfaces/IOrder";
 
 const Order = () => {
   
-  
+  // STATES***************************************************
   const {selectedShop, rootURL} = useContext(MainContext);
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
@@ -29,6 +29,7 @@ const Order = () => {
   const [owner_id, setOwnerId] = React.useState<any>(null);
   const [tableNo, setTableNo] = React.useState<any>(null);
   
+  // GETTING AND PROCESSING THE ITEMS**************************
   async function getSelectedShopItems() {
     try {
       const { data, status } = await axios.get(rootURL+"/shops/"+selectedShop+"/items");
@@ -44,8 +45,6 @@ const Order = () => {
       }
     }
   }
-  
-  
   function categorizeItems(){
     let itemTypes:string[] = [];
     items.forEach(function(item:any){
@@ -56,9 +55,7 @@ const Order = () => {
     return itemTypes;
   }
   const itemTypes = categorizeItems();
-  
   const itemsList = itemTypes.map(itemType=>{
-    
     const itemsOfItemType = items.map(function(item:any){
       if(item.item_type === itemType){
         return(
@@ -81,8 +78,11 @@ const Order = () => {
         </div>
     )
   })
+
+
+
   
-  
+ // QR CODE SCANNING *************************************** 
   const startScan = async () => {
     BarcodeScanner.hideBackground(); // make background of WebView transparent
     document.body.style.background = "transparent";
@@ -95,7 +95,6 @@ const Order = () => {
       setQrCode("NO CODE DETECTED");
     }
   };
-  
   const checkPermission = async () => {
     // check or request permission
     const status = await BarcodeScanner.checkPermission({ force: true });
@@ -107,7 +106,6 @@ const Order = () => {
     
     return false;
   };
-  
   function scanQRCode(){
     setScanning(true);
   checkPermission().then(function(res){
@@ -116,7 +114,7 @@ const Order = () => {
 }
 
 
-// STORAGE
+// STORAGE***************************************************
 const setOwnerToStorage = async (owner_id : string) => {
   await Storage.set({
     key: "owner_id",
@@ -147,8 +145,10 @@ const updateTableInfo = async () => {
   const tableNo = await Storage.get({key: "table_no"});
   setTableNo(tableNo);
 }
-// STORAGE END
 
+
+
+// CLAIMING TABLES************************************************************
 async function isTableAvailable(shop_id: string, table_id: string) {
   try {
     const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/tables/"+table_id);
@@ -163,7 +163,6 @@ async function isTableAvailable(shop_id: string, table_id: string) {
     }
   }
 }
-
 async function ClaimTable(shop_id: string, table_id: string, owner_id: string) {
   try {
     const { data, status } = await axios.put(rootURL+"/shops/"+shop_id+"/tables/"+table_id, {owner_id: owner_id, status: 1});
@@ -178,7 +177,6 @@ async function ClaimTable(shop_id: string, table_id: string, owner_id: string) {
     }
   }
 }
-
 async function tryClaimTable(){
   if(qrCode && !claimed){
     const [shop_id, table_id] = qrCode.split("-");
@@ -204,13 +202,14 @@ async function tryClaimTable(){
   }
   return false;
 }
-
 async function syncClaimed(){
   const claimed = await Storage.get({key: "claimed"});
   console.log(claimed.value==="true")
   setClaimed(claimed.value==="true");
 }
 
+
+// USE EFFECT HOOKS AND PAGE LIFE CYCLE****************************************
 React.useEffect(()=>{
   getSelectedShopItems();
   syncClaimed();
