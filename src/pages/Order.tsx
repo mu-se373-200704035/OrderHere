@@ -1,5 +1,5 @@
 import "./Order.css";
-import { IonContent, IonHeader, IonPage, IonTitle, IonToast, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, IonToolbar } from '@ionic/react';
 import React from 'react';
 import { nanoid } from "nanoid";
 import { MainContext, useContext } from "../components/Context";
@@ -18,6 +18,8 @@ import IOrder from "../interfaces/IOrder";
 
 const Order = () => {
   
+  const [present, dismiss] = useIonToast();
+
   // STATES***************************************************
   const {selectedShop, rootURL} = useContext(MainContext);
   const axios: any = require("axios").default;
@@ -143,7 +145,7 @@ const updateTableInfo = async () => {
   const ownerID = await Storage.get({key: "owner_id"});
   setOwnerId(ownerID);
   const tableNo = await Storage.get({key: "table_no"});
-  setTableNo(tableNo);
+  setTableNo(tableNo.value);
 }
 
 
@@ -193,10 +195,12 @@ async function tryClaimTable(){
         setClaimedToStorage(true);
         setClaimed(true);
         console.log("successfully claimed the table");
+        present(`successfully claimed the table ${data.table.table_no}`,1500);
         return true;
       }
     }else{
       console.log("table is not available");
+      present(`table is not available `,1500);
       return false
     }
   }
@@ -206,6 +210,8 @@ async function syncClaimed(){
   const claimed = await Storage.get({key: "claimed"});
   console.log(claimed.value==="true")
   setClaimed(claimed.value==="true");
+  const tableno = await Storage.get({key: "table_no"});
+  setTableNo(tableno.value);
 }
 
 
@@ -229,7 +235,7 @@ React.useEffect(()=>{
 
 // to debug on web
 function triggerQrCodeChange(){
-  setQrCode("1-1");
+  setQrCode("1-2");
 }
 
 
@@ -238,6 +244,7 @@ return (
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order</IonTitle>
+          {claimed && <h5 className="table-no" slot="end">table {tableNo}</h5>}
           {!claimed && <button className="scan" slot="end" onClick={scanQRCode}>Scan QR</button>}
         </IonToolbar>
       </IonHeader>
