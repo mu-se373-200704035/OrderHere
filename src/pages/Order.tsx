@@ -21,20 +21,21 @@ const Order = () => {
   const [present, dismiss] = useIonToast();
 
   // STATES***************************************************
-  const {selectedShop, rootURL} = useContext(MainContext);
+  const {currentPageDetails,setCurrentPageDetails, rootURL} = useContext(MainContext);
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
-  const [orders, setOrders] = React.useState<IOrder[]>([]);
+  const [sliderActive, setSliderActive] = React.useState(false);
   const [scanning, setScanning] = React.useState(false);
   const [qrCode, setQrCode] = React.useState<any>(null);
   const [claimed, setClaimed] = React.useState<any>(false);
   const [owner_id, setOwnerId] = React.useState<any>(null);
   const [tableNo, setTableNo] = React.useState<any>(null);
+  const [tableId, setTableId] = React.useState<any>(null);
   
   // GETTING AND PROCESSING THE ITEMS**************************
-  async function getSelectedShopItems() {
+  async function getShopItems() {
     try {
-      const { data, status } = await axios.get(rootURL+"/shops/"+selectedShop+"/items");
+      const { data, status } = await axios.get(rootURL+"/shops/"+currentPageDetails.shop_id+"/items");
       setItems(data);
       console.log("status: ",status);
       categorizeItems();
@@ -65,7 +66,10 @@ const Order = () => {
           id={item.id}
           name={item.name}
           price= {item.price}
-          description={item.description} />
+          description={item.description}
+          quantity={item.quantity}
+          items={items}
+          setItems={setItems} />
           )
         }
         return;
@@ -123,11 +127,12 @@ const setOwnerToStorage = async (owner_id : string) => {
     value: owner_id
   })
 }
-const setTableToStorage = async (table_no : string) => {
+const setTableNoToStorage = async (table_no : string) => {
   await Storage.set({
     key: "table_no",
     value: table_no
-  })
+  }
+  )
 }
 const setClaimedToStorage = async (bool : boolean) => {
   await Storage.set({
@@ -141,11 +146,19 @@ const setShopIdToStorage = async (shop_id: number) => {
     value: JSON.stringify(shop_id)
   })
 }
+const setTableIdToStorage = async (table_id: number) => {
+  await Storage.set({
+    key: "table_id",
+    value: JSON.stringify(table_id)
+  })
+}
 const updateTableInfo = async () => {
   const ownerID = await Storage.get({key: "owner_id"});
-  setOwnerId(ownerID);
+  setOwnerId(ownerID.value);
   const tableNo = await Storage.get({key: "table_no"});
   setTableNo(tableNo.value);
+  const tableId = await Storage.get({key: "table_id"});
+  setTableId(tableId.value);
 }
 
 
@@ -190,12 +203,14 @@ async function tryClaimTable(){
       
       if(data.table.owner_id === owner_id){
         setOwnerToStorage(owner_id);
-        setTableToStorage(data.table.table_no);
+        setTableNoToStorage(data.table.table_no);
+        setTableIdToStorage(data.table.id);
         setShopIdToStorage(data.table.shop_id);
         setClaimedToStorage(true);
         setClaimed(true);
         console.log("successfully claimed the table");
         present(`successfully claimed the table ${data.table.table_no}`,1500);
+        setCurrentPageDetails((prevState: any)=>{return {...prevState, table_id: table_id}})
         return true;
       }
     }else{
@@ -208,17 +223,27 @@ async function tryClaimTable(){
 }
 async function syncClaimed(){
   const claimed = await Storage.get({key: "claimed"});
-  console.log(claimed.value==="true")
   setClaimed(claimed.value==="true");
   const tableno = await Storage.get({key: "table_no"});
   setTableNo(tableno.value);
+  const tableId = await Storage.get({key: "table_id"});
+  if(claimed){
+    setTableId(tableId.value);
+    setCurrentPageDetails((prevState: any)=>{
+      return{
+        ...prevState,
+        table_id: tableId.value
+      };
+    });
+  }
 }
 
 
 // USE EFFECT HOOKS AND PAGE LIFE CYCLE****************************************
 React.useEffect(()=>{
-  getSelectedShopItems();
+  getShopItems();
   syncClaimed();
+
 },[])
 
 React.useEffect(()=>{
@@ -228,8 +253,8 @@ React.useEffect(()=>{
 },[qrCode]);
 
 React.useEffect(()=>{
-  //get owner_id from Storage and check according to the result set Claimed
   updateTableInfo();
+  
 },[claimed])
 
 
@@ -238,12 +263,16 @@ function triggerQrCodeChange(){
   setQrCode("1-2");
 }
 
+function toggleSlider(){
+  setSliderActive(prevState=>!prevState);
+}
 
 return (
   <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order</IonTitle>
+          <button slot="end" onClick={toggleSlider}>slider</button>
           {claimed && <h5 className="table-no" slot="end">table {tableNo}</h5>}
           {!claimed && <button className="scan" slot="end" onClick={scanQRCode}>Scan QR</button>}
         </IonToolbar>
@@ -255,8 +284,9 @@ return (
           </IonToolbar>
         </IonHeader>
         <button onClick={triggerQrCodeChange}>Trigger qr</button>
-        <OrderSlider orders={orders}
-                     setOrders={setOrders}/>
+        <OrderSlider slider={sliderActive}
+                    setSlider={setSliderActive}
+                    owner_id={owner_id}/>
         <ShopCard name={items[0] && items[0].shop}/>
         {!claimed && <h6>please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>

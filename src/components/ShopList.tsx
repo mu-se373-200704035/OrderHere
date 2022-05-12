@@ -1,7 +1,6 @@
 import { IonItem, IonList } from "@ionic/react";
 import "./ShopList.css"
 import { nanoid } from "nanoid";
-import React from "react";
 import { useHistory } from "react-router";
 //components
 import ShopCard from "./ShopCard";
@@ -9,12 +8,17 @@ import { MainContext, useContext } from "./Context";
 
 export default function ShopList(props: any){
     
-    const {setSelectedShop} = useContext(MainContext);
+    const {currentPageDetails, setCurrentPageDetails} = useContext(MainContext);
 
     const history = useHistory();
         const orderPage = (id:number) => {
             history.push("/order");
-            setSelectedShop(id);
+            setCurrentPageDetails((prevState: any)=>{
+                return{
+                    ...prevState,
+                    shop_id: id
+                }
+            });
         }
 
     const shopCards = props.shops.map(function(shop:any){

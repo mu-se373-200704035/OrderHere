@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import React from 'react';
 import { MainContext } from './components/Context';
+import IItem from "./interfaces/IItem";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,17 +25,24 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Shops from './pages/Shops';
 import Order from './pages/Order';
+import IPageDetails from './interfaces/IPageDetails';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   
-  const [selectedShop, setSelectedShop] = React.useState<number>();
+  const [currentOrderItems, setCurrentOrderItems] = React.useState<IItem[]>([]);
+  const [currentPageDetails, setCurrentPageDetails] = React.useState<IPageDetails>();
   const rootURL = "https://orderhere.herokuapp.com";
+  const axios = require("axios").default;
+  
   const data:any = {
-    selectedShop,
-    setSelectedShop,
-    rootURL
+    rootURL,
+    axios,
+    currentOrderItems,
+    setCurrentOrderItems,
+    currentPageDetails,
+    setCurrentPageDetails
   }
 
   return(
