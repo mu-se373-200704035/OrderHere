@@ -2,9 +2,10 @@ import "./Order.css";
 import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, IonToolbar } from '@ionic/react';
 import React from 'react';
 import { nanoid } from "nanoid";
-import { MainContext, useContext } from "../components/Context";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Storage } from "@capacitor/storage";
+//context 
+import { MainContext, useContext } from "../components/Context";
 //components
 import Item from "../components/Item";
 import ShopCard from "../components/ShopCard";
@@ -12,8 +13,6 @@ import Searchbar from "../components/Searchbar";
 import OrderSlider from "../components/OrderSlider";
 //interfaces
 import IItem from "../interfaces/IItem";
-import IOrder from "../interfaces/IOrder";
-
 
 
 const Order = () => {
@@ -21,7 +20,7 @@ const Order = () => {
   const [present, dismiss] = useIonToast();
 
   // STATES***************************************************
-  const {currentPageDetails,setCurrentPageDetails, rootURL} = useContext(MainContext);
+  const {currentPageDetails,setCurrentPageDetails, rootURL } = useContext(MainContext);
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
   const [sliderActive, setSliderActive] = React.useState(false);
@@ -30,7 +29,10 @@ const Order = () => {
   const [claimed, setClaimed] = React.useState<any>(false);
   const [owner_id, setOwnerId] = React.useState<any>(null);
   const [tableNo, setTableNo] = React.useState<any>(null);
-  const [tableId, setTableId] = React.useState<any>(null);
+  const [allOrderItemsFromServer, setAllOrderItemsFromServer] = React.useState<any>(()=>[]);
+  const {shop_id, table_id} = currentPageDetails;
+
+
   
   // GETTING AND PROCESSING THE ITEMS**************************
   async function getShopItems() {
@@ -85,7 +87,21 @@ const Order = () => {
     )
   })
 
-
+ // GETTING ORDER ITEMS
+ async function getAllOrderItems(){
+  try {
+    const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/order_items");
+    setAllOrderItemsFromServer(data);
+  }
+  catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      console.log('error message: ', error.message);
+    } else {
+      console.log('unexpected error: ', error);
+    }
+    return null;
+  }
+} 
 
   
  // QR CODE SCANNING *************************************** 
@@ -157,8 +173,6 @@ const updateTableInfo = async () => {
   setOwnerId(ownerID.value);
   const tableNo = await Storage.get({key: "table_no"});
   setTableNo(tableNo.value);
-  const tableId = await Storage.get({key: "table_id"});
-  setTableId(tableId.value);
 }
 
 
@@ -228,7 +242,6 @@ async function syncClaimed(){
   setTableNo(tableno.value);
   const tableId = await Storage.get({key: "table_id"});
   if(claimed){
-    setTableId(tableId.value);
     setCurrentPageDetails((prevState: any)=>{
       return{
         ...prevState,
@@ -243,8 +256,10 @@ async function syncClaimed(){
 React.useEffect(()=>{
   getShopItems();
   syncClaimed();
-
 },[])
+React.useEffect(()=>{
+  getAllOrderItems();
+},[items])
 
 React.useEffect(()=>{
   if(qrCode)
@@ -286,7 +301,8 @@ return (
         <button onClick={triggerQrCodeChange}>Trigger qr</button>
         <OrderSlider slider={sliderActive}
                     setSlider={setSliderActive}
-                    owner_id={owner_id}/>
+                    owner_id={owner_id}
+                    allOrderItems={allOrderItemsFromServer}/>
         <ShopCard name={items[0] && items[0].shop}/>
         {!claimed && <h6>please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>

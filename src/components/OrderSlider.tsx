@@ -16,7 +16,6 @@ export default function OrderSlider(props: any){
 
     const {currentOrderItems, setCurrentOrderItems, axios, rootURL, currentPageDetails} = useContext(MainContext);
     const {shop_id, table_id} = currentPageDetails;
-    const [allOrderItemsFromServer, setAllOrderItemsFromServer] = React.useState<any>([]);
     const [billItems, setBillItems] = React.useState<any>([]);
     const [notDeliveredItems, setNotDeliveredItems] = React.useState<any>([]);
     const [totalPrices, setTotalPrices] = React.useState<any>({billTotal:0,notDeliveredTotal:0});
@@ -25,22 +24,7 @@ export default function OrderSlider(props: any){
     function addItemsButton(){
       props.setSlider((prevState: any)=>!prevState);
     }
-    
-
-    async function getAllOrderItems(){
-      try {
-        const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/order_items");
-        setAllOrderItemsFromServer(data);
-      }
-      catch (error: any) {
-        if (axios.isAxiosError(error)) {
-          console.log('error message: ', error.message);
-        } else {
-          console.log('unexpected error: ', error);
-        }
-        return null;
-      }
-    }
+  
     async function postOrderItems(orderItems: any[]){
       try {
         const { data, status } = await axios.post(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/order_items", {items: orderItems});
@@ -60,7 +44,7 @@ export default function OrderSlider(props: any){
 
 
     async function sendOrder(){
-      if([] != currentOrderItems){
+      if(currentOrderItems[0]){
         const itemsToSend = currentOrderItems.map((item:any)=>{
           console.log(props.owner_id)
           return {
@@ -74,10 +58,11 @@ export default function OrderSlider(props: any){
         if(status){
           setCurrentOrderItems([]);
           present("order is sent successfully!",2000);
-          getAllOrderItems();
         }else{
           present("something went wrong.", 2000);
         }
+      }else{
+        present("Current Order list is empty", 1500);
       }
     }
 
@@ -97,8 +82,8 @@ export default function OrderSlider(props: any){
     function tryCategorizeOrderItems(){
       let bill : any[] = [];
       let notDelivered : any[] = [];
-      if(allOrderItemsFromServer[0]){
-        allOrderItemsFromServer.forEach((item:any)=>{
+      if(props.allOrderItems[0]){
+        props.allOrderItems.forEach((item:any)=>{
           if(item.status){
             bill.push(item);
           }else{
@@ -125,10 +110,14 @@ export default function OrderSlider(props: any){
     }
 
     React.useEffect(()=>{
-      getAllOrderItems();
       tryCategorizeOrderItems();
+    },[props.allOrderItems])
+    React.useEffect(()=>{
       calculateTotalPrices();
-    },[props.slider])
+    },[billItems,notDeliveredItems])
+
+    React.useEffect(()=>{
+    },[currentPageDetails.page])
 
     
     const billElements = billItems.map((item:any)=>{

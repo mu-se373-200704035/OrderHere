@@ -16,7 +16,8 @@ export default function ShopList(props: any){
             setCurrentPageDetails((prevState: any)=>{
                 return{
                     ...prevState,
-                    shop_id: id
+                    shop_id: id,
+                    page: "order"
                 }
             });
         }
