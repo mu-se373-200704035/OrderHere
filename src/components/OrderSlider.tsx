@@ -115,7 +115,6 @@ export default function OrderSlider(props: any){
     React.useEffect(()=>{
       calculateTotalPrices();
     },[billItems,notDeliveredItems])
-
     React.useEffect(()=>{
     },[currentPageDetails.page])
 

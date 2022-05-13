@@ -1,11 +1,15 @@
 import "./Item.css";
 import { MainContext, useContext } from "./Context";
+import { useIonToast } from "@ionic/react";
 export default function Item(props: any){
     
+    const [present, dismiss] = useIonToast();
     const {id, name, price, description, quantity ,items} = props; 
     
     
-    const {currentOrderItems, setCurrentOrderItems} = useContext(MainContext);
+    const {currentOrderItems, setCurrentOrderItems, currentPageDetails, axios, rootURL} = useContext(MainContext);
+    const {shop_id, table_id} = currentPageDetails;
+    
     const theItem = currentOrderItems.find((item: any)=> {
         if(item)
             return item.id === id
@@ -17,32 +21,70 @@ export default function Item(props: any){
     }
     const shouldRenderControls = shouldShowControls(); 
 
-    const onItemClick = (id: number) => {
-        if(!theItem || theItem.quantity < 1){
-            const newItem = {
-                ...items.find((item: any)=>item.id===id),
-                quantity: 1
+    const isItemOnStock = async (id:number) => {
+        try {
+            const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/items/"+id);
+            return (data.item.quantity > 0)
+          }
+          catch (error: any) {
+            if (axios.isAxiosError(error)) {
+              console.log('error message: ', error.message);
+            } else {
+              console.log('unexpected error: ', error);
             }
-                setCurrentOrderItems((prevOrders: any) => {
-                return [
-                    ...prevOrders,
-                    newItem
-                ]
-            })
+          }
+    }
+    const isItemSufficient = async (id:number, count: number) => {
+        try {
+            const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/items/"+id);
+            return (data.item.quantity > count)
+        }
+        catch (error: any) {
+            if (axios.isAxiosError(error)) {
+              console.log('error message: ', error.message);
+            } else {
+              console.log('unexpected error: ', error);
+            }
         }
     }
-    const onIncrement = (id:number)=>{
-        const newOrders = currentOrderItems.map((item: any)=>{
-            if (item.id!==id){
-                return item;
-            }else{
-                return {
-                    ...item,
-                    quantity: item.quantity+1
+    const onItemClick = async (id: number) => {
+        if(!theItem || theItem.quantity < 1){
+            if(await isItemOnStock(id)){
+                const newItem = {
+                    ...items.find((item: any)=>item.id===id),
+                    quantity: 1
                 }
+                    setCurrentOrderItems((prevOrders: any) => {
+                    return [
+                        ...prevOrders,
+                        newItem
+                    ]
+                })
+            }else{
+                present("Item is not currently at stock.",2000);
             }
-        })
-        setCurrentOrderItems(newOrders);
+        }
+    }
+    const onIncrement = async (id:number)=>{
+        let quantity=0;
+        currentOrderItems.forEach((item:any)=>{
+            if(item.id===id){quantity = item.quantity}
+        });
+        if(await isItemSufficient(id, quantity)){
+            const newOrders = currentOrderItems.map((item: any)=>{
+                if (item.id!==id){
+                    return item;
+                }else{
+                    return {
+                        ...item,
+                        quantity: item.quantity+1
+                    }
+                }});
+            setCurrentOrderItems(newOrders);
+        }
+        else{
+            present("Item stock is not sufficient.",2000);
+        } 
     }
     const onDecrement = (id: number)=>{
         const newOrders = currentOrderItems.reduce((result:any[], item: any)=>{
