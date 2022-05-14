@@ -374,7 +374,7 @@ return (
             <DisplayIcon logo="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
           </button>
           
-          {claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
+          {!claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
             <DisplayIcon logo="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
           </button>}
         </IonToolbar>
