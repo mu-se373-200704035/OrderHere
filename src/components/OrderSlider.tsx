@@ -37,6 +37,7 @@ export default function OrderSlider(props: any){
           console.log('error message: ', error.message);
         } else {
           console.log('unexpected error: ', error);
+          present(error, 2000);
         }
         return false;
       }
@@ -46,7 +47,6 @@ export default function OrderSlider(props: any){
     async function sendOrder(){
       if(currentOrderItems[0]){
         const itemsToSend = currentOrderItems.map((item:any)=>{
-          console.log(props.owner_id)
           return {
             ...item,
             shop_id: shop_id,
@@ -54,10 +54,12 @@ export default function OrderSlider(props: any){
             owner_id: props.owner_id
           }
         })
+        console.log(itemsToSend)
         const status = await postOrderItems(itemsToSend);
         if(status){
           setCurrentOrderItems([]);
           present("order is sent successfully!",2000);
+          props.getAllOrderItems();
         }else{
           present("something went wrong.", 2000);
         }
@@ -108,13 +110,18 @@ export default function OrderSlider(props: any){
       })
       setTotalPrices({billTotal: billTotal, notDeliveredTotal: notDeliveredTotal});
     }
+    React.useEffect(()=>{
+      props.getAllOrderItems();
+    },[])
 
     React.useEffect(()=>{
       tryCategorizeOrderItems();
     },[props.allOrderItems])
+
     React.useEffect(()=>{
       calculateTotalPrices();
     },[billItems,notDeliveredItems])
+
     React.useEffect(()=>{
     },[currentPageDetails.page])
 
@@ -147,6 +154,7 @@ export default function OrderSlider(props: any){
 
     return(
           <section style={sliderStyle}className="order-slider">
+            <h1>{props.shopName} - {props.tableNo}</h1>
             <h2 className="title">current order</h2>
             {currentOrderItemElements}
 

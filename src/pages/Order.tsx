@@ -1,5 +1,5 @@
 import "./Order.css";
-import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, useIonPicker, IonToolbar } from '@ionic/react';
 import React from 'react';
 import { nanoid } from "nanoid";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
@@ -16,11 +16,13 @@ import IItem from "../interfaces/IItem";
 
 
 const Order = () => {
-  
+  // Ionic hooks**********************************************
   const [present, dismiss] = useIonToast();
-
+  const [presentPicker] = useIonPicker();
+  
   // STATES***************************************************
-  const {currentPageDetails,setCurrentPageDetails, rootURL } = useContext(MainContext);
+  const {currentOrderItems, currentPageDetails,setCurrentPageDetails, rootURL,
+        currentTableInfo, setCurrentTableInfo} = useContext(MainContext);
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
   const [sliderActive, setSliderActive] = React.useState(false);
@@ -31,7 +33,8 @@ const Order = () => {
   const [tableNo, setTableNo] = React.useState<any>(null);
   const [allOrderItemsFromServer, setAllOrderItemsFromServer] = React.useState<any>(()=>[]);
   const {shop_id, table_id} = currentPageDetails;
-
+  const [shopName, setShopName] = React.useState<any>("");
+  const [pickerValue, setPickerValue] = React.useState<any>("");
 
   
   // GETTING AND PROCESSING THE ITEMS**************************
@@ -158,8 +161,14 @@ const setClaimedToStorage = async (bool : boolean) => {
 }
 const setShopIdToStorage = async (shop_id: number) => {
   await Storage.set({
-    key: "shop-id",
+    key: "shop_id",
     value: JSON.stringify(shop_id)
+  })
+}
+const setShopNameToStorage = async (shop_name: string) =>{
+  await Storage.set({
+    key: "shop_name",
+    value: JSON.stringify(shop_name)
   })
 }
 const setTableIdToStorage = async (table_id: number) => {
@@ -173,6 +182,8 @@ const updateTableInfo = async () => {
   setOwnerId(ownerID.value);
   const tableNo = await Storage.get({key: "table_no"});
   setTableNo(tableNo.value);
+  const shopname = (await Storage.get({key: "shop_name"})).value;
+  setShopName(shopname?.substring(1,shopname.length-1));
 }
 
 
@@ -220,6 +231,7 @@ async function tryClaimTable(){
         setTableNoToStorage(data.table.table_no);
         setTableIdToStorage(data.table.id);
         setShopIdToStorage(data.table.shop_id);
+        setShopNameToStorage(items[0] && items[0].shop)
         setClaimedToStorage(true);
         setClaimed(true);
         console.log("successfully claimed the table");
@@ -241,16 +253,25 @@ async function syncClaimed(){
   const tableno = await Storage.get({key: "table_no"});
   setTableNo(tableno.value);
   const tableId = await Storage.get({key: "table_id"});
+  const shopid = await Storage.get({key: "shop_id"});
   if(claimed){
     setCurrentPageDetails((prevState: any)=>{
       return{
         ...prevState,
-        table_id: tableId.value
+        table_id: tableId.value,
+        shop_id: shopid.value,
       };
     });
   }
 }
-
+async function getTableFromStorageSetCurrentTableInfo(){
+  const shopIdFromStorage = (await Storage.get({key:"shop_id"})).value;
+  const tableIdFromStorage = (await Storage.get({key: "table_id"})).value;
+  setCurrentTableInfo({
+    shop_id: shopIdFromStorage,
+    table_id: tableIdFromStorage
+  })    
+}
 
 // USE EFFECT HOOKS AND PAGE LIFE CYCLE****************************************
 React.useEffect(()=>{
@@ -269,11 +290,20 @@ React.useEffect(()=>{
 
 React.useEffect(()=>{
   updateTableInfo();
-  
+  getTableFromStorageSetCurrentTableInfo();
 },[claimed])
 
+React.useEffect(()=>{
+  getTableFromStorageSetCurrentTableInfo();
+},[shop_id, tableNo, table_id, currentPageDetails])
 
-// to debug on web
+React.useEffect(()=>{
+  if(pickerValue !==""){
+    postWaiterRequest();
+  }
+},[pickerValue])
+
+// to debug on web 
 function triggerQrCodeChange(){
   setQrCode("1-2");
 }
@@ -281,12 +311,63 @@ function triggerQrCodeChange(){
 function toggleSlider(){
   setSliderActive(prevState=>!prevState);
 }
+function requestWaiter(){
+  presentPicker({
+    buttons: [
+      {
+        text: 'Cancel',
+        handler: (selected) => {
+          
+        },
+      },
+      {
+        text: 'Confirm',
+        handler: (selected) => {
+          setPickerValue(selected.purpose.value)
+        },
+      },
+      
+    ],
+    columns: [
+      {
+        name: 'purpose',
+        options: [
+          { text: 'Help', value: 'help' },
+          { text: 'Request Check', value: 'check' },
+        ],
+      }
+    ],
+  })
+}
+async function postWaiterRequest(){
+  try {
+    const { data, status } = await axios.post(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/requests",
+    //request 
+    {
+      shop_id: shop_id,
+      table_id: table_id,
+      owner_id: owner_id,
+      purpose: pickerValue
+    });
+    present("Waiter request sent.", 1500);
+    setPickerValue("");
+  }
+  catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      console.log('error message: ', error.message);
+    } else {
+      console.log('unexpected error: ', error);
+      present(error, 2000);
+    }
+  }
+}
 
 return (
   <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order</IonTitle>
+          {claimed && <button className="scan" slot="end" onClick={requestWaiter}>Request Waiter</button>}
           <button slot="end" onClick={toggleSlider}>slider</button>
           {claimed && <h5 className="table-no" slot="end">table {tableNo}</h5>}
           {!claimed && <button className="scan" slot="end" onClick={scanQRCode}>Scan QR</button>}
@@ -302,7 +383,10 @@ return (
         <OrderSlider slider={sliderActive}
                     setSlider={setSliderActive}
                     owner_id={owner_id}
-                    allOrderItems={allOrderItemsFromServer}/>
+                    allOrderItems={allOrderItemsFromServer}
+                    getAllOrderItems={getAllOrderItems}
+                    tableNo={tableNo}
+                    shopName={shopName}/>
         <ShopCard name={items[0] && items[0].shop}/>
         {!claimed && <h6>please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>

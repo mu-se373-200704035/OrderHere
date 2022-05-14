@@ -7,7 +7,8 @@ export default function Item(props: any){
     const {id, name, price, description, quantity ,items} = props; 
     
     
-    const {currentOrderItems, setCurrentOrderItems, currentPageDetails, axios, rootURL} = useContext(MainContext);
+    const {currentOrderItems, setCurrentOrderItems, currentPageDetails, axios, rootURL,
+    currentTableInfo} = useContext(MainContext);
     const {shop_id, table_id} = currentPageDetails;
     
     const theItem = currentOrderItems.find((item: any)=> {
@@ -24,7 +25,7 @@ export default function Item(props: any){
     const isItemOnStock = async (id:number) => {
         try {
             const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/items/"+id);
-            return (data.item.quantity > 0)
+            return (data.item && data.item.quantity > 0)
           }
           catch (error: any) {
             if (axios.isAxiosError(error)) {
@@ -49,7 +50,7 @@ export default function Item(props: any){
     }
     const onItemClick = async (id: number) => {
         if(!theItem || theItem.quantity < 1){
-            if(await isItemOnStock(id)){
+            if(shop_id === currentTableInfo.shop_id && await isItemOnStock(id)){
                 const newItem = {
                     ...items.find((item: any)=>item.id===id),
                     quantity: 1
@@ -60,7 +61,9 @@ export default function Item(props: any){
                         newItem
                     ]
                 })
-            }else{
+            }else if(currentTableInfo.shop_id!==shop_id){
+                present("This item is not on the menu. You are probably looking at the wrong shop's menu.", 3000);
+            }else{    
                 present("Item is not currently at stock.",2000);
             }
         }
@@ -117,7 +120,7 @@ export default function Item(props: any){
                         +
                     </div>    
                 </div>}
-                <h3 className="item-price">{price}</h3>
+                <h3 className="item-price">${price}</h3>
             </div>
             {description && <h4 className="item-desc">{description}</h4>}
         </section>

@@ -11,7 +11,7 @@ export default function OrderItem(props: any){
                 <div className="controls-wrapper">
                     x{quantity}       
                 </div>
-                <h3 className="item-price">{price}</h3>
+                <h3 className="item-price">${price}</h3>
             </div>
             {description && <h4 className="item-desc">{description}</h4>}
         </section>

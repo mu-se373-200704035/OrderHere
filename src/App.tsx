@@ -33,6 +33,7 @@ const App: React.FC = () => {
   
   const [currentOrderItems, setCurrentOrderItems] = React.useState<IItem[]>([]);
   const [currentPageDetails, setCurrentPageDetails] = React.useState<IPageDetails>();
+  const [currentTableInfo, setCurrentTableInfo] = React.useState<any>();
   const rootURL = "https://orderhere.herokuapp.com";
   const axios = require("axios").default;
   
@@ -42,7 +43,9 @@ const App: React.FC = () => {
     currentOrderItems,
     setCurrentOrderItems,
     currentPageDetails,
-    setCurrentPageDetails
+    setCurrentPageDetails,
+    currentTableInfo,
+    setCurrentTableInfo
   }
 
   return(
