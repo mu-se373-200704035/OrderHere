@@ -1,21 +1,31 @@
 .item-type-title{
     margin-left:.4em;
-    color: purple;
+    color: var(--ion-color-primary);
     font-size: 1.4rem;
 }
 .menu{
-    color:purple;
+    color:var(--ion-color-primary);
     font-weight: bold;
     padding-left: .4em;
 }
-.scan{
-    padding: 1em;
+
+.header-btn{
+    padding: .5em;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-.qrcode{
-    color: red;
-    font-weight: bold;
-    font-size: 1em;
-}
-.table-no{
+.qr-btn{
     margin-right: .5em;
 }
+.extra-small{
+    font-size: .7em;
+    text-align: center;
+    margin: 0;
+    margin-top: .2em;
+    margin-bottom: -.4em;
+    color: var(--ion-color-dark);
+}
+

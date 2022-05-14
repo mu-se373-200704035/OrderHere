@@ -1,4 +1,8 @@
+//icons
+import DisplayIcon from "../components/DisplayIcon";
+//style
 import "./Order.css";
+// react - ionic - 3rd party
 import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, useIonPicker, IonToolbar } from '@ionic/react';
 import React from 'react';
 import { nanoid } from "nanoid";
@@ -13,7 +17,6 @@ import Searchbar from "../components/Searchbar";
 import OrderSlider from "../components/OrderSlider";
 //interfaces
 import IItem from "../interfaces/IItem";
-
 
 const Order = () => {
   // Ionic hooks**********************************************
@@ -42,7 +45,6 @@ const Order = () => {
     try {
       const { data, status } = await axios.get(rootURL+"/shops/"+currentPageDetails.shop_id+"/items");
       setItems(data);
-      console.log("status: ",status);
       categorizeItems();
     }
     catch (error: any) {
@@ -192,7 +194,6 @@ const updateTableInfo = async () => {
 async function isTableAvailable(shop_id: string, table_id: string) {
   try {
     const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/tables/"+table_id);
-    console.log("status: ",status);
     return data.table.status ? false : true;
   }
   catch (error: any) {
@@ -206,7 +207,6 @@ async function isTableAvailable(shop_id: string, table_id: string) {
 async function ClaimTable(shop_id: string, table_id: string, owner_id: string) {
   try {
     const { data, status } = await axios.put(rootURL+"/shops/"+shop_id+"/tables/"+table_id, {owner_id: owner_id, status: 1});
-    console.log("status: ",status);
     return data;
   }
   catch (error: any) {
@@ -234,13 +234,11 @@ async function tryClaimTable(){
         setShopNameToStorage(items[0] && items[0].shop)
         setClaimedToStorage(true);
         setClaimed(true);
-        console.log("successfully claimed the table");
         present(`successfully claimed the table ${data.table.table_no}`,1500);
         setCurrentPageDetails((prevState: any)=>{return {...prevState, table_id: table_id}})
         return true;
       }
     }else{
-      console.log("table is not available");
       present(`table is not available `,1500);
       return false
     }
@@ -304,9 +302,9 @@ React.useEffect(()=>{
 },[pickerValue])
 
 // to debug on web 
-function triggerQrCodeChange(){
-  setQrCode("1-2");
-}
+// function triggerQrCodeChange(){
+//   setQrCode("1-2");
+// }
 
 function toggleSlider(){
   setSliderActive(prevState=>!prevState);
@@ -367,10 +365,18 @@ return (
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order</IonTitle>
-          {claimed && <button className="scan" slot="end" onClick={requestWaiter}>Request Waiter</button>}
-          <button slot="end" onClick={toggleSlider}>slider</button>
-          {claimed && <h5 className="table-no" slot="end">table {tableNo}</h5>}
-          {!claimed && <button className="scan" slot="end" onClick={scanQRCode}>Scan QR</button>}
+          {claimed && <button className="header-btn" slot="end" onClick={requestWaiter}>
+              <DisplayIcon logo="requestWaiterIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+              <h6 className="extra-small">waiter</h6>
+            </button>}
+          
+          <button className="header-btn" slot="end" onClick={toggleSlider}>
+            <DisplayIcon logo="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+          </button>
+          
+          {claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
+            <DisplayIcon logo="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+          </button>}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen hidden={scanning}>
@@ -379,7 +385,7 @@ return (
             <IonTitle size="large">Order</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <button onClick={triggerQrCodeChange}>Trigger qr</button>
+        {/* <button onClick={triggerQrCodeChange}>Trigger qr</button> */}
         <OrderSlider slider={sliderActive}
                     setSlider={setSliderActive}
                     owner_id={owner_id}

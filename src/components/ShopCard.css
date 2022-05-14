@@ -1,10 +1,11 @@
 .shop-card{
-    width:98%;
+    width:95%;
     height:8em;
-    background: #E5E5E5;
+    background: var(--ion-color-secondary);
     padding-left:.8em;
     padding-top: .05em;
     margin: .5em auto;
+    margin-top: 1em;
     border-radius: 10px;
 }
 .shop-name{

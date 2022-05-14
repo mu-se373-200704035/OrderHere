@@ -28,7 +28,6 @@ export default function OrderSlider(props: any){
     async function postOrderItems(orderItems: any[]){
       try {
         const { data, status } = await axios.post(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/order_items", {items: orderItems});
-        console.log("order items are posted successfully, status: ",status);
         console.log(data);
         return true;
       }
@@ -54,7 +53,6 @@ export default function OrderSlider(props: any){
             owner_id: props.owner_id
           }
         })
-        console.log(itemsToSend)
         const status = await postOrderItems(itemsToSend);
         if(status){
           setCurrentOrderItems([]);
@@ -154,9 +152,10 @@ export default function OrderSlider(props: any){
 
     return(
           <section style={sliderStyle}className="order-slider">
-            <h1>{props.shopName} - {props.tableNo}</h1>
+            <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>
             <h2 className="title">current order</h2>
             {currentOrderItemElements}
+            {!currentOrderItemElements[0] && <p className="add-items-paragraph">add items to this list, tap send order and start waiting</p>}
 
             <section className="order-slider-buttons">
               <button onClick={addItemsButton} className="add-order-item-btn">add items</button>
@@ -166,12 +165,12 @@ export default function OrderSlider(props: any){
 
             <h2 className="title">waiting for delivery</h2>
             {notDeliveredElements}
-            <h3>Total : ${totalPrices.notDeliveredTotal}</h3>
+            <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>
             <div className="divider-line"></div>
 
             <h2 className="title">bill</h2>
             {billElements}
-            <h3>Total : ${totalPrices.billTotal}</h3>
+            <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
           </section>
     )
 }

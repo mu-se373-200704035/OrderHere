@@ -2,13 +2,13 @@
     width: 95%;
     min-height: fit-content;
     margin: .2em auto;
-    background: rgba(255, 237, 255, 0.419);
+    background: var(--ion-color-secondary);
     border-radius: 10px;
     padding: .5em;
     transition: ease-in-out 25ms;
 }
 .item-wrapper:active{
-    background: rgba(255, 237, 255, 0.701);
+    background: var(--ion-color-secondary-shade);
 }
 .item-topline{
     display: flex;
@@ -39,7 +39,7 @@
 
 }
 .control-btn{
-    background: purple;
+    background: var(--ion-color-primary);
     color: white;
     font-weight: bold;
     display: flex;

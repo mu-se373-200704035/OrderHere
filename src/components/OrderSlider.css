@@ -1,5 +1,5 @@
 .order-slider{
-    background:black;
+    background: var(--ion-color-light);
     width:100%;
     height: 100%;
     position: fixed;
@@ -8,20 +8,31 @@
     left: 100%;
     transition: ease-in-out 120ms;
 }
+.shop-table-title{
+    font-size: .8em;
+    color: var(--ion-color-dark-shade);
+    font-weight: bold;
+    padding-left: .3em;
+}
 .title{
     padding-left: .4em;
-    color:purple;
+    color: var(--ion-color-primary);
+}
+.total-price{
+    font-size: 1.2em;
+    color: var(--ion-color-dark-shade);
+    padding-left: .5em;
 }
 .add-order-item-btn{
-    border: solid purple 2px;
-    color: purple;
+    border: solid var(--ion-color-primary) 2px;
+    color: var(--ion-color-primary);
     background-color: white;
     padding: .5em 1em;
 }
 .send-order-btn{
-    border: solid purple 2px;
+    border: solid var(--ion-color-primary) 2px;
     color: white;
-    background-color: purple;
+    background-color: var(--ion-color-primary);
     padding: .5em 1em;
 }
 .order-slider-buttons{
@@ -31,8 +42,39 @@
     margin-top: 1em;
 }
 .divider-line{
-    background: purple;
+    background: var(--ion-color-primary);
     height: 2px;
     width: 90%;
     margin: 1em auto;
+}
+.add-items-paragraph{
+    max-width: 75%;
+    font-size: .8em;
+    text-align: center;
+    margin: 2em auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    .title{
+        padding-left: .4em;
+        color: var(--ion-color-primary-shade);
+    }
+    .add-order-item-btn{
+        border: solid var(--ion-color-secondary-shade) 2px;
+        color: #DDD;
+        background-color: var(--ion-color-light-shade);
+        padding: .5em 1em;
+    }
+    .send-order-btn{
+        border: solid var(--ion-color-secondary) 2px;
+        color: #EEE;
+        background-color: var(--ion-color-secondary);
+        padding: .5em 1em;
+    }
+    .divider-line{
+        background: var(--ion-color-secondary);
+        height: 2px;
+        width: 90%;
+        margin: 1em auto;
+    }
 }
