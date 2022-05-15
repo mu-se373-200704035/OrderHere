@@ -26,6 +26,9 @@ import './theme/variables.css';
 import Shops from './pages/Shops';
 import Order from './pages/Order';
 import IPageDetails from './interfaces/IPageDetails';
+import AdminOrders from './pages/AdminOrders';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 setupIonicReact();
 
@@ -60,6 +63,18 @@ const App: React.FC = () => {
 
           <Route exact path="/order">
             <Order />
+          </Route>
+
+          <Route exact path="/admin/orders">
+            <AdminOrders />
+          </Route>
+
+          <Route exact path="/register">
+            <Register />
+          </Route>
+
+          <Route exact path="/login">
+            <Login />
           </Route>
 
           <Route exact path="/">
