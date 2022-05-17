@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { MainContext, useContext } from '../components/Context';
 import LoginForm from '../components/LoginForm';
 const Login = () => {
@@ -8,7 +8,10 @@ const Login = () => {
         <IonPage>
           <IonHeader>
             <IonToolbar>
-              <IonTitle>Login</IonTitle>
+              <IonButtons>
+                <IonBackButton></IonBackButton>
+            <IonTitle>Login</IonTitle>
+          </IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent fullscreen>

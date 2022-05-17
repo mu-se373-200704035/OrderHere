@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { MainContext, useContext } from '../components/Context';
 const AdminOrders = () => {
 
@@ -6,7 +6,10 @@ const AdminOrders = () => {
         <IonPage>
           <IonHeader>
             <IonToolbar>
+              <IonButtons>
+                <IonBackButton></IonBackButton>
               <IonTitle>Orders</IonTitle>
+            </IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent fullscreen>

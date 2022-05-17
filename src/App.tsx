@@ -29,6 +29,8 @@ import IPageDetails from './interfaces/IPageDetails';
 import AdminOrders from './pages/AdminOrders';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Root from './pages/Root';
+import ISession from './interfaces/ISession';
 
 setupIonicReact();
 
@@ -37,8 +39,9 @@ const App: React.FC = () => {
   const [currentOrderItems, setCurrentOrderItems] = React.useState<IItem[]>([]);
   const [currentPageDetails, setCurrentPageDetails] = React.useState<IPageDetails>();
   const [currentTableInfo, setCurrentTableInfo] = React.useState<any>();
-  const rootURL = "https://orderhere.herokuapp.com";
+  const rootURL = "http://localhost:3000";
   const axios = require("axios").default;
+  const [session, setSession] = React.useState<ISession>();
   
   const data:any = {
     rootURL,
@@ -48,7 +51,9 @@ const App: React.FC = () => {
     currentPageDetails,
     setCurrentPageDetails,
     currentTableInfo,
-    setCurrentTableInfo
+    setCurrentTableInfo,
+    session,
+    setSession
   }
 
   return(
@@ -72,13 +77,17 @@ const App: React.FC = () => {
           <Route exact path="/register">
             <Register />
           </Route>
-
+          
           <Route exact path="/login">
             <Login />
           </Route>
+          
+          <Route exact path="/welcome">
+            <Root />
+          </Route>
 
           <Route exact path="/">
-            <Redirect to="/shops" />
+            <Redirect to="/welcome" />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

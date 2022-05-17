@@ -3,7 +3,7 @@ import DisplayIcon from "../components/DisplayIcon";
 //style
 import "./Order.css";
 // react - ionic - 3rd party
-import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, useIonPicker, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, useIonPicker, IonToolbar, IonButtons, IonBackButton } from '@ionic/react';
 import React from 'react';
 import { nanoid } from "nanoid";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
@@ -364,7 +364,10 @@ return (
   <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Order</IonTitle>
+          <IonButtons>
+            <IonBackButton></IonBackButton>
+            <IonTitle>Order</IonTitle>
+          </IonButtons>
           {claimed && <button className="header-btn" slot="end" onClick={requestWaiter}>
               <DisplayIcon logo="requestWaiterIcon" fill="var(--ion-color-dark)"></DisplayIcon>
               <h6 className="extra-small">waiter</h6>

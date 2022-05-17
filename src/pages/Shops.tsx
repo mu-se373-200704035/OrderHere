@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Shops.css';
 import React from 'react';
 //components
@@ -35,7 +35,10 @@ const Shops = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Shops</IonTitle>
+          <IonButtons>
+            <IonBackButton></IonBackButton>
+            <IonTitle>Shops</IonTitle>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

@@ -9,3 +9,19 @@
     justify-content: center;
     align-items: center;
 }
+.decorative-rect-login{
+    position: fixed;
+    left: -50px;
+    width: 150%;
+    height: 400px;
+    top: calc(100% - 150px);
+    background-color: var(--ion-color-primary);
+    transform: rotate(-25deg);
+    transition: ease-in-out 250ms;
+}
+@media (prefers-color-scheme: dark) {
+    .decorative-rect-login{
+        background-color: var(--ion-color-secondary);
+        transform: rotate(335deg);
+    }
+}
