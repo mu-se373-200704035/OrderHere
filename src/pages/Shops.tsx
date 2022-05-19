@@ -4,12 +4,12 @@ import React from 'react';
 //components
 import Searchbar from '../components/Searchbar';
 import ShopList from '../components/ShopList';
+//context
+import { MainContext, useContext } from '../components/Context';
 
 const Shops = () => {
   
-  const axios: any = require("axios").default;
-  const rootURL = "https://orderhere.herokuapp.com";
-
+  const {rootURL, axios} = useContext(MainContext)
   const [shops, setShops] = React.useState([]);
 
   async function getShops() {

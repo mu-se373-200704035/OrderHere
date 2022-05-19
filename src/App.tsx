@@ -42,18 +42,18 @@ const App: React.FC = () => {
   const rootURL = "http://localhost:3000";
   const axios = require("axios").default;
   const [session, setSession] = React.useState<ISession>();
+  const [headers, setHeaders] = React.useState<ISession>();
+  const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
   
   const data:any = {
     rootURL,
     axios,
-    currentOrderItems,
-    setCurrentOrderItems,
-    currentPageDetails,
-    setCurrentPageDetails,
-    currentTableInfo,
-    setCurrentTableInfo,
-    session,
-    setSession
+    currentOrderItems,  setCurrentOrderItems,
+    currentPageDetails, setCurrentPageDetails,
+    currentTableInfo,   setCurrentTableInfo,
+    session,            setSession,
+    headers,            setHeaders,
+    loggedIn,           setLoggedIn
   }
 
   return(

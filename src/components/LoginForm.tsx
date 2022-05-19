@@ -22,22 +22,22 @@ export default function LoginForm(){
 
 
     const goToRegister = () => {
-        history.push("/register");
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
                 page: "register"
             }
         });
+        history.push("/register");
     }
     const goToAdminOrders = () => {
-        history.push("/admin/orders");
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
                 page: "admin/orders"
             }
         });
+        history.push("/admin/orders");
     }
 
     const isLoginFormValid=()=>{

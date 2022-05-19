@@ -4,7 +4,7 @@ const Root = () => {
         <IonPage>
           <IonContent fullscreen>
               <IonButton routerLink='/shops'>I am a customer</IonButton>
-              <IonButton routerLink='/login'>I am an employee</IonButton>
+              <IonButton routerLink='/admin/orders'>I am an employee</IonButton>
           </IonContent>
         </IonPage>
     )
