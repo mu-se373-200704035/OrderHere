@@ -1,0 +1,31 @@
+.order-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    margin: 2em auto;
+}
+.order-wrapper-control-div{
+    display: flex;
+    justify-content: space-between;
+    height: 2em;
+    margin-bottom: .5em;
+    border-bottom: solid 2px var(--ion-color-primary);
+}
+.order-wrapper-table-no{
+ font-size: 1.2em;
+ margin: 0;
+ margin-left: .4em;
+}
+.order-wrapper-complete-btn{
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--ion-color-primary);
+    color: var(--ion-color-dark);
+    transition: 50ms ease-in-out;
+}
+.order-wrapper-complete-btn:active{
+    background: var(--ion-color-primary-shade)
+}

@@ -16,7 +16,8 @@ const Login = () => {
   const [present, dismiss] = useIonToast();
   const history = useHistory();
   const {setLoggedIn,
-        setCurrentPageDetails} = useContext(MainContext);
+        setCurrentPageDetails,
+        setHeaders} = useContext(MainContext);
 
   // NAVIGATION *****************************************
   const goToAdminOrders=()=>{
@@ -31,9 +32,10 @@ const Login = () => {
 
   // SESSION***********************************************
   const checkSession = async ()=>{
-    const [data, status] = await getSessionFromStorage();
+    const [data, status, headers] = await getSessionFromStorage();
     if(status===200){
       setLoggedIn(true);
+      setHeaders(headers);
       setCurrentPageDetails((prevDetails: any)=>{
         return{
           ...prevDetails,

@@ -12,9 +12,11 @@ export default function OrderList(props: any){
     const getOrdersByTableIds = (tableIds: number[]) => {
         const ordersByTableIds = tableIds.map((tableId: number)=>{
             let table_no = "";
+            let table_id;
             const tableOrders = props.orderItems.map((order: any)=>{
                 if(tableId === order.table_id){
                     table_no = order.table;
+                    table_id = order.table_id;
                     return (
                         <OrderItem 
                         key={nanoid()}
@@ -31,6 +33,7 @@ export default function OrderList(props: any){
                 <OrderWrapper 
                 key={nanoid()}
                 orders={tableOrders}
+                table_id={table_id}
                 table_no={table_no}
                 />
             )
