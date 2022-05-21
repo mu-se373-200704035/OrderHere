@@ -31,14 +31,19 @@ const Login = () => {
 
   // SESSION***********************************************
   const checkSession = async ()=>{
-    const status = await getSessionFromStorage();
+    const [data, status] = await getSessionFromStorage();
     if(status===200){
       setLoggedIn(true);
-      console.log("ok");
+      setCurrentPageDetails((prevDetails: any)=>{
+        return{
+          ...prevDetails,
+          "shop_id" : data.shop_id
+        }
+      })
       goToAdminOrders();
     }else{
       console.log("session is not available!");
-      present("Session may be expired!");
+      present("Session may be expired!",2000);
     }
   }
 

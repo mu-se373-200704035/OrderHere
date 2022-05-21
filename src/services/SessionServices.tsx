@@ -11,14 +11,9 @@ const getSessionFromStorage = async () => {
     if(sessionObject){
       try{
         const res = await axios.get(rootURL+"/auth/validate_token",{
-          headers: {
-            uid: sessionObject.uid,
-            client: sessionObject.client,
-            "access-token": sessionObject["access-token"],
-            "token-type": sessionObject["token-type"]
-          }
+          headers: sessionObject
         });
-        return res.status
+        return [res.data.data, res.status, sessionObject]
       }
       catch (error: any) {
         if (axios.isAxiosError(error)) {
@@ -29,7 +24,7 @@ const getSessionFromStorage = async () => {
         return error.status
       }
     }
-  }
+}
 
 export {
     getSessionFromStorage

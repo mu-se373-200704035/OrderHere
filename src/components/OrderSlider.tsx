@@ -4,7 +4,7 @@ import Item from "./Item";
 //context
 import { MainContext, useContext } from "./Context";
 import { nanoid } from "nanoid";
-import { useIonToast } from "@ionic/react";
+import { IonList, useIonToast } from "@ionic/react";
 import React from "react";
 import OrderItem from "./OrderItem";
 
@@ -154,7 +154,9 @@ export default function OrderSlider(props: any){
           <section style={sliderStyle}className="order-slider">
             <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>
             <h2 className="title">current order</h2>
-            {currentOrderItemElements}
+            <IonList>
+              {currentOrderItemElements}
+            </IonList>
             {!currentOrderItemElements[0] && <p className="add-items-paragraph">add items to this list, tap send order and start waiting</p>}
 
             <section className="order-slider-buttons">
@@ -164,12 +166,16 @@ export default function OrderSlider(props: any){
             <div className="divider-line"></div>
 
             <h2 className="title">waiting for delivery</h2>
-            {notDeliveredElements}
+            <IonList>
+              {notDeliveredElements}
+            </IonList>
             <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>
             <div className="divider-line"></div>
 
             <h2 className="title">bill</h2>
-            {billElements}
+            <IonList>
+              {billElements}
+            </IonList>
             <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
           </section>
     )
