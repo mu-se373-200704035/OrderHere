@@ -369,16 +369,16 @@ return (
             <IonTitle>Order</IonTitle>
           </IonButtons>
           {claimed && <button className="header-btn" slot="end" onClick={requestWaiter}>
-              <DisplayIcon logo="requestWaiterIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+              <DisplayIcon icon="requestWaiterIcon" fill="var(--ion-color-dark)"></DisplayIcon>
               <h6 className="extra-small">waiter</h6>
             </button>}
           
           <button className="header-btn" slot="end" onClick={toggleSlider}>
-            <DisplayIcon logo="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+            <DisplayIcon icon="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
           </button>
           
           {!claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
-            <DisplayIcon logo="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+            <DisplayIcon icon="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
           </button>}
         </IonToolbar>
       </IonHeader>

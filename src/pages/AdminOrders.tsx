@@ -1,4 +1,5 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import "./AdminOrders.css";
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 //services
@@ -7,14 +8,18 @@ import { getSessionFromStorage } from '../services/SessionServices';
 import { MainContext, useContext } from '../components/Context';
 //components
 import OrderList from '../components/OrderList';
+import DisplayIcon from '../components/DisplayIcon';
+import RequestsSlider from "../components/RequestsSlider";
 
 const AdminOrders = () => {
 
   const history = useHistory();
   const {loggedIn, setLoggedIn, currentPageDetails, setCurrentPageDetails,
-        axios, rootURL, setHeaders} = useContext(MainContext);
+        axios, rootURL, headers, setHeaders} = useContext(MainContext);
   const [orderItems, setOrderItems] = useState<any>([]);
   const [tableIds, setTableIds] = useState<number[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
+  const [sliderActive, setSliderActive] = useState<boolean>(false);
 
   const checkSession = async () => {
     const [data, status, headers] = await getSessionFromStorage();
@@ -67,11 +72,30 @@ const AdminOrders = () => {
     return tableIds;
 }
 
+  const getRequests = async () => {
+    try{
+      const res = await axios.get(rootURL+`/shops/${currentPageDetails.shop_id}/requests`,{
+        headers: headers
+      });
+      setRequests(res.data);
+    }
+    catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        console.log('error message: ', error.message);
+      } else {
+        console.log('unexpected error: ', error);
+      }
+    }
+  }
 
   useEffect(()=>{
     checkSession();
-
   },[])
+  useEffect(()=>{
+    if(loggedIn){
+      getRequests();
+    }
+  },[currentPageDetails])
 
   return (
     <IonPage>
@@ -79,7 +103,11 @@ const AdminOrders = () => {
         <IonToolbar>
           <IonButtons>
             <IonBackButton></IonBackButton>
-          <IonTitle>Orders</IonTitle>
+            <IonTitle>Orders</IonTitle>
+            <button onClick={()=>setSliderActive((prev: boolean)=> !prev)} className="requests-slider-btn">
+              {requests.length>0 && <div className="notifications">{requests.length}</div>}
+              <DisplayIcon icon="requestWaiterIcon" fill="white"/>
+            </button>
         </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -89,10 +117,15 @@ const AdminOrders = () => {
             <IonTitle size="large">Orders</IonTitle>
           </IonToolbar>
         </IonHeader>
-        
         <OrderList orderItems={orderItems}
-                    tableIds={tableIds}/>
+                    tableIds={tableIds}
+                    getOrderItems={getOrderItems}/>
 
+        <RequestsSlider 
+          sliderActive={sliderActive}
+          requests={requests}
+          getRequests={getRequests}
+        />
       </IonContent>
     </IonPage>
   )

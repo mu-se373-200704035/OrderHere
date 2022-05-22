@@ -35,6 +35,7 @@ export default function OrderList(props: any){
                 orders={tableOrders}
                 table_id={table_id}
                 table_no={table_no}
+                getOrderItems={props.getOrderItems}
                 />
             )
         });

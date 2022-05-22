@@ -1,0 +1,14 @@
+.request{
+    margin-top: 1em;
+}
+.request-text{
+    font-size: 1em;
+}
+.fulfill-request-btn{
+    padding: .4em;
+    background: transparent;
+    transition: 50ms ease-in-out;
+}
+.fulfill-request-btn:active{
+    background: var(--ion-color-light-tint);
+}
