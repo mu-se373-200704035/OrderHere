@@ -24,7 +24,7 @@ const Login = () => {
     setCurrentPageDetails((prevState:any)=>{
       return {
         ...prevState,
-        page: "admin/orders"
+        page: "/admin/orders"
       }
     })
     history.push("/admin/orders");

@@ -28,4 +28,10 @@
     margin-bottom: -.4em;
     color: var(--ion-color-dark);
 }
+.scan-to-order{
+    font-size: 1em;
+    text-align: center;
+    margin: 1em auto;
+    max-width: 85%;
+}
 

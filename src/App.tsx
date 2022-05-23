@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { MainContext } from './components/Context';
 import IItem from "./interfaces/IItem";
 
@@ -31,19 +31,24 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Root from './pages/Root';
 import ISession from './interfaces/ISession';
+import AdminTables from './pages/AdminTables';
+import TableDetails from './pages/TableDetails';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   
-  const [currentOrderItems, setCurrentOrderItems] = React.useState<IItem[]>([]);
-  const [currentPageDetails, setCurrentPageDetails] = React.useState<IPageDetails>();
-  const [currentTableInfo, setCurrentTableInfo] = React.useState<any>();
+  const [currentOrderItems, setCurrentOrderItems] = useState<IItem[]>([]);
+  const [currentPageDetails, setCurrentPageDetails] = useState<IPageDetails>();
+  const [currentTableInfo, setCurrentTableInfo] = useState<any>();
   const rootURL = "http://localhost:3000";
   const axios = require("axios").default;
-  const [session, setSession] = React.useState<ISession>();
-  const [headers, setHeaders] = React.useState<ISession>();
-  const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
+  const [session, setSession] = useState<ISession>();
+  const [headers, setHeaders] = useState<ISession>();
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>();
+  const [tables, setTables] = useState<any>();
+
   
   const data:any = {
     rootURL,
@@ -53,7 +58,9 @@ const App: React.FC = () => {
     currentTableInfo,   setCurrentTableInfo,
     session,            setSession,
     headers,            setHeaders,
-    loggedIn,           setLoggedIn
+    loggedIn,           setLoggedIn,
+    selectedTab,        setSelectedTab,
+    tables,             setTables,
   }
 
   return(
@@ -69,9 +76,17 @@ const App: React.FC = () => {
           <Route exact path="/order">
             <Order />
           </Route>
-
+          
           <Route exact path="/admin/orders">
             <AdminOrders />
+          </Route>
+          
+          <Route exact path="/admin/tables">
+            <AdminTables />
+          </Route>
+          
+          <Route exact path="/admin/tables/details">
+            <TableDetails />
           </Route>
 
           <Route exact path="/register">

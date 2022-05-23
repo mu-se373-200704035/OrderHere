@@ -17,7 +17,7 @@ export default function ShopList(props: any){
                 return{
                     ...prevState,
                     shop_id: id,
-                    page: "order"
+                    page: "/order"
                 }
             });
         }
@@ -26,7 +26,7 @@ export default function ShopList(props: any){
         
         return(
                 <IonItem key={nanoid()}
-                onClick={() => orderPage(shop.id)}>
+                    onClick={() => orderPage(shop.id)}>
                     <ShopCard
                         id={shop.id}
                         name={shop.name}

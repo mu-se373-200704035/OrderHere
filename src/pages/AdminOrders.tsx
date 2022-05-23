@@ -1,5 +1,5 @@
 import "./AdminOrders.css";
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 //services
@@ -10,6 +10,10 @@ import { MainContext, useContext } from '../components/Context';
 import OrderList from '../components/OrderList';
 import DisplayIcon from '../components/DisplayIcon';
 import RequestsSlider from "../components/RequestsSlider";
+import TabBar from "../components/TabBar";
+//icons
+import { arrowBackOutline } from "ionicons/icons";
+
 
 const AdminOrders = () => {
 
@@ -33,12 +37,13 @@ const AdminOrders = () => {
         }
       })
       getOrderItems(data.shop_id, headers);
+      console.log("checked")
     }
     else{
       setCurrentPageDetails((prevDetails:any)=>{
         return{
           ...prevDetails,
-          page: "login"
+          page: "/login"
         }
       })
       history.push("/login");
@@ -73,6 +78,9 @@ const AdminOrders = () => {
 }
 
   const getRequests = async () => {
+    if(currentPageDetails.shop_id === null){
+      return;
+    }
     try{
       const res = await axios.get(rootURL+`/shops/${currentPageDetails.shop_id}/requests`,{
         headers: headers
@@ -89,24 +97,38 @@ const AdminOrders = () => {
   }
 
   useEffect(()=>{
-    checkSession();
-  },[])
+    if(currentPageDetails.page.includes("admin")){
+      checkSession();
+    }
+  },[currentPageDetails.page])
   useEffect(()=>{
-    if(loggedIn){
+    if(loggedIn && currentPageDetails.page==="/admin/orders"){
       getRequests();
     }
   },[currentPageDetails])
+
+  const goBackToRoot = () => {
+    setCurrentPageDetails((prevDetails: any)=>{
+        return{
+            ...prevDetails,
+            page: "/welcome"
+        }
+    });
+    history.push("/welcome");
+}
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons>
-            <IonBackButton></IonBackButton>
+            <IonButton onClick={goBackToRoot}>
+              <IonIcon icon={arrowBackOutline}></IonIcon>
+            </IonButton>
             <IonTitle>Orders</IonTitle>
             <button onClick={()=>setSliderActive((prev: boolean)=> !prev)} className="requests-slider-btn">
               {requests.length>0 && <div className="notifications">{requests.length}</div>}
-              <DisplayIcon icon="requestWaiterIcon" fill="white"/>
+              <DisplayIcon icon="requestWaiterIcon" fill="var(--ion-color-dark-shade)"/>
             </button>
         </IonButtons>
         </IonToolbar>
@@ -120,12 +142,15 @@ const AdminOrders = () => {
         <OrderList orderItems={orderItems}
                     tableIds={tableIds}
                     getOrderItems={getOrderItems}/>
+        {!orderItems[0] && <h2 className="no-items">There are no orders waiting for delivery.</h2>}
 
         <RequestsSlider 
           sliderActive={sliderActive}
           requests={requests}
           getRequests={getRequests}
         />
+
+        <TabBar page="/admin/orders"/>
       </IonContent>
     </IonPage>
   )

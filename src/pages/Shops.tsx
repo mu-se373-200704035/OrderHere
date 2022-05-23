@@ -38,6 +38,7 @@ const Shops = () => {
           <IonButtons>
             <IonBackButton></IonBackButton>
             <IonTitle>Shops</IonTitle>
+            
           </IonButtons>
         </IonToolbar>
       </IonHeader>

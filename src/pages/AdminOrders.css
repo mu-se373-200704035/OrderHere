@@ -16,3 +16,9 @@
     left: 15px;
     top: 3px;
 }
+.no-items{
+    text-align: center;
+    font-size: 1.2em;
+    max-width: 75%;
+    margin: 1.2em auto;
+}

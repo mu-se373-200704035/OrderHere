@@ -119,7 +119,7 @@ const Order = () => {
     if (result.hasContent) {
       setQrCode(result.content);
     }else{
-      setQrCode("NO CODE DETECTED");
+      console.log("NO CODE DETECTED");
     }
   };
   const checkPermission = async () => {
@@ -135,7 +135,7 @@ const Order = () => {
   };
   function scanQRCode(){
     setScanning(true);
-  checkPermission().then(function(res){
+    checkPermission().then(function(res){
     res && startScan();
   });
 }
@@ -397,7 +397,7 @@ return (
                     tableNo={tableNo}
                     shopName={shopName}/>
         <ShopCard name={items[0] && items[0].shop}/>
-        {!claimed && <h6>please scan a qr code and claim a table to be able to order.</h6>}
+        {!claimed && <h6 className="scan-to-order">please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>
         <Searchbar placeholder="search for items"/>
         {itemsList}

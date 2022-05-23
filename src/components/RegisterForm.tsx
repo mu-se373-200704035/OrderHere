@@ -119,7 +119,7 @@ export default function RegisterForm(){
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
-                page: "login"
+                page: "/login"
             }
         });
     }
@@ -128,7 +128,7 @@ export default function RegisterForm(){
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
-                page: "admin/orders"
+                page: "/admin/orders"
             }
         });
     }

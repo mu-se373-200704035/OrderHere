@@ -25,7 +25,7 @@ export default function LoginForm(){
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
-                page: "register"
+                page: "/register"
             }
         });
         history.push("/register");
@@ -34,7 +34,7 @@ export default function LoginForm(){
         setCurrentPageDetails((prevState: any)=>{
             return{
                 ...prevState,
-                page: "admin/orders"
+                page: "/admin/orders"
             }
         });
         history.push("/admin/orders");
