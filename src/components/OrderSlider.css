@@ -54,6 +54,7 @@
     margin: 2em auto;
 }
 
+
 @media (prefers-color-scheme: dark) {
     .title{
         padding-left: .4em;
@@ -76,5 +77,8 @@
         height: 2px;
         width: 90%;
         margin: 1em auto;
+    }
+    .list-dark{
+        background: var(--ion-color-light);
     }
 }

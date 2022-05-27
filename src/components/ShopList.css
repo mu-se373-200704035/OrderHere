@@ -3,3 +3,11 @@
     color: var(--ion-color-primary);
     font-weight: bold;
 }
+@media (prefers-color-scheme: dark){
+    .list-dark{
+        background: var(--ion-color-light) !important;
+    }
+    .item-dark{
+        --background: var(--ion-color-light) !important;
+    }
+}

@@ -1,8 +1,9 @@
 .shop-card{
+    background: var(--ion-color-primary);
+    color: var(--ion-color-light);
     width:95%;
     height:8em;
-    background: var(--ion-color-secondary);
-    padding-left:.8em;
+    padding-left: .8em;
     padding-top: .05em;
     margin: .5em auto;
     margin-top: 1em;
@@ -11,4 +12,10 @@
 .shop-name{
     font-size: 1.2em;
     font-weight: bold;
+}
+
+@media (prefers-color-scheme: dark){
+    .shop-card{
+        background: var(--ion-color-secondary);
+    }
 }

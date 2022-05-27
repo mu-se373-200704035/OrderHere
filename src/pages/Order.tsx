@@ -374,9 +374,9 @@ return (
               <h6 className="extra-small">waiter</h6>
             </button>}
           
-          <button className="header-btn" slot="end" onClick={toggleSlider}>
+          {!claimed && <button className="header-btn" slot="end" onClick={toggleSlider}>
             <DisplayIcon icon="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
-          </button>
+          </button>}
           
           {!claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
             <DisplayIcon icon="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>

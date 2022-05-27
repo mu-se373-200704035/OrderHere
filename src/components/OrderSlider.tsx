@@ -178,9 +178,9 @@ export default function OrderSlider(props: any){
 
     return(
           <section style={sliderStyle}className="order-slider">
-            <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>
+            {props.claimed && <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>}
             <h2 className="title">current order</h2>
-            <IonList>
+            <IonList className="list-dark">
               {currentOrderItemElements}
             </IonList>
             {!currentOrderItemElements[0] && <p className="add-items-paragraph">add items to this list, tap send order and start waiting</p>}
@@ -191,18 +191,18 @@ export default function OrderSlider(props: any){
             </section>
             <div className="divider-line"></div>
 
-            <h2 className="title">waiting for delivery</h2>
-            <IonList>
+            {props.claimed && <h2 className="title">waiting for delivery</h2>}
+            {props.claimed && <IonList className="list-dark">
               {notDeliveredElements}
-            </IonList>
-            <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>
-            <div className="divider-line"></div>
+            </IonList>}
+            {props.claimed && <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>}
+            {props.claimed && <div className="divider-line"></div>}
 
-            <h2 className="title">bill</h2>
-            <IonList>
+            {props.claimed && <h2 className="title">bill</h2>}
+            {props.claimed && <IonList className="list-dark">
               {billElements}
-            </IonList>
-            <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
+            </IonList>}
+            {props.claimed && <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>}
 
             <div className="order-slider-buttons">
               {props.claimed && <button onClick={alertCheckOut} className="send-order-btn">check out</button>}

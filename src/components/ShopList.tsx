@@ -8,7 +8,7 @@ import { MainContext, useContext } from "./Context";
 
 export default function ShopList(props: any){
     
-    const {currentPageDetails, setCurrentPageDetails} = useContext(MainContext);
+    const {setCurrentPageDetails} = useContext(MainContext);
 
     const history = useHistory();
         const orderPage = (id:number) => {
@@ -25,7 +25,7 @@ export default function ShopList(props: any){
     const shopCards = props.shops.map(function(shop:any){
         
         return(
-                <IonItem key={nanoid()}
+                <IonItem className="item-dark" key={nanoid()}
                     onClick={() => orderPage(shop.id)}>
                     <ShopCard
                         id={shop.id}
@@ -39,7 +39,7 @@ export default function ShopList(props: any){
     return(
         <section>
             <h1 className="shop-list-title">{ props.title }</h1>
-            <IonList lines="none">
+            <IonList className="list-dark" lines="none">
                 {shopCards}
             </IonList>
         </section>
