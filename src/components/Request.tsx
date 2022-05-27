@@ -29,7 +29,7 @@ export default function Request(props: any){
     let message="";
     if(props.purpose==="help"){
         message = `Table ${props.table} needs help.`
-    }else if(props.purpose==="checkout"){
+    }else if(props.purpose==="check"){
         message = `Table ${props.table} wants to check out.` 
     }else{
         message = `Table ${props.table}This request type is not implemented yet.`
