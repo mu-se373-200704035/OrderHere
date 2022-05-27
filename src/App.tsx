@@ -41,7 +41,7 @@ const App: React.FC = () => {
   const [currentOrderItems, setCurrentOrderItems] = useState<IItem[]>([]);
   const [currentPageDetails, setCurrentPageDetails] = useState<IPageDetails>();
   const [currentTableInfo, setCurrentTableInfo] = useState<any>();
-  const rootURL = "http://localhost:3000";
+  const rootURL = "https://orderhere.herokuapp.com";
   const axios = require("axios").default;
   const [session, setSession] = useState<ISession>();
   const [headers, setHeaders] = useState<ISession>();

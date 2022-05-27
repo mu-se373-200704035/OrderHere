@@ -162,7 +162,7 @@ export default function RegisterForm(){
                 
                 <input onChange={(e)=>{setShopId(e.target.value)}}
                 className="form-input" type="number"
-                placeholder="shop id" value={shopId}/>
+                placeholder="shop-id" value={shopId}/>
 
                 <div className="register-buttons">
                     <button onClick={Register}className="register-btn" type="button">register</button>

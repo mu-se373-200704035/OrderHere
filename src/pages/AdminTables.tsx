@@ -59,8 +59,10 @@ const AdminTables = () => {
 
 
     useEffect(()=>{
+      if(currentPageDetails.page==="/admin/tables"){
         checkSession();
-      },[])
+      }
+      },[currentPageDetails.page])
 
     const goBackToRoot = () => {
         setCurrentPageDetails((prevDetails: any)=>{

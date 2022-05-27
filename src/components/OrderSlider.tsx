@@ -7,11 +7,13 @@ import { nanoid } from "nanoid";
 import { IonList, useIonToast } from "@ionic/react";
 import React from "react";
 import OrderItem from "./OrderItem";
-
+import { useIonAlert } from "@ionic/react";
+import { Storage } from "@capacitor/storage";
 
 
 export default function OrderSlider(props: any){
   const [present, dismiss] = useIonToast();
+  const [alert] = useIonAlert();
   const sliderStyle = props.slider?{left:"0%"}:{left:"100%"}
 
     const {currentOrderItems, setCurrentOrderItems, axios, rootURL, currentPageDetails} = useContext(MainContext);
@@ -150,6 +152,30 @@ export default function OrderSlider(props: any){
       )
     })
 
+    const checkOut = async () => {
+      await Storage.remove({key: "shop_name"})
+      await Storage.remove({key: "table_id"})
+      await Storage.remove({key: "table_no"})
+      await Storage.remove({key: "shop_id"})
+      await Storage.remove({key: "owner_id"})
+      await Storage.remove({key: "claimed"})
+      await props.updateTableInfo();
+      await props.syncClaimed();
+    }
+
+    const alertCheckOut = () => {
+      alert({
+        cssClass: 'alert',
+        header: 'Check out?',
+        message: 'This action will only affect client and is recommended only if you have paid. Are you sure you want to check out?',
+        buttons: [
+          'Cancel',
+          { text: 'Agree', handler: () => checkOut() },
+        ],
+        onDidDismiss: () => {},
+      })
+    }
+
     return(
           <section style={sliderStyle}className="order-slider">
             <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>
@@ -177,6 +203,11 @@ export default function OrderSlider(props: any){
               {billElements}
             </IonList>
             <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
+
+            <div className="order-slider-buttons">
+              {props.claimed && <button onClick={alertCheckOut} className="send-order-btn">check out</button>}
+            </div>
+
           </section>
     )
 }

@@ -1,11 +1,11 @@
 // use this service only in React.useEffect since it has local storage implementations !!!
 import { Storage } from "@capacitor/storage";
 
-const rootURL = "http://localhost:3000";
+const rootURL = "https://orderhere.herokuapp.com";
 const axios = require("axios").default;
 
 
-const getSessionFromStorage = async () => {
+const getSessionFromStorage : any = async () => {
     const session = await Storage.get({key: "session"});
     const sessionObject = session.value!=null && JSON.parse(session.value);
     if(sessionObject){
@@ -21,7 +21,7 @@ const getSessionFromStorage = async () => {
         } else {
           console.log('unexpected error: ', error);
         }
-        return error.status
+        return [error.status, error, error]
       }
     }
 }

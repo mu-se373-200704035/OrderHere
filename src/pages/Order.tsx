@@ -24,8 +24,8 @@ const Order = () => {
   const [presentPicker] = useIonPicker();
   
   // STATES***************************************************
-  const {currentOrderItems, currentPageDetails,setCurrentPageDetails, rootURL,
-        currentTableInfo, setCurrentTableInfo} = useContext(MainContext);
+  const {currentPageDetails,setCurrentPageDetails, rootURL,
+        setCurrentTableInfo} = useContext(MainContext);
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
   const [sliderActive, setSliderActive] = React.useState(false);
@@ -75,6 +75,7 @@ const Order = () => {
           price= {item.price}
           description={item.description}
           quantity={item.quantity}
+          shop_id={item.shop_id}
           items={items}
           setItems={setItems} />
           )
@@ -220,8 +221,6 @@ async function ClaimTable(shop_id: string, table_id: string, owner_id: string) {
 async function tryClaimTable(){
   if(qrCode && !claimed){
     const [shop_id, table_id] = qrCode.split("-");
-    // make request to claim the table
-    //  GET - if available, PUT owner id to table save to local storage DONE
     if(await isTableAvailable(shop_id, table_id)){
       const owner_id = nanoid();
       const data = await ClaimTable(shop_id, table_id, owner_id);
@@ -234,6 +233,7 @@ async function tryClaimTable(){
         setShopNameToStorage(items[0] && items[0].shop)
         setClaimedToStorage(true);
         setClaimed(true);
+        setScanning(false);
         present(`successfully claimed the table ${data.table.table_no}`,1500);
         setCurrentPageDetails((prevState: any)=>{return {...prevState, table_id: table_id}})
         return true;
@@ -281,9 +281,10 @@ React.useEffect(()=>{
 },[items])
 
 React.useEffect(()=>{
-  if(qrCode)
-  setScanning(prev=>!prev); // comment out this line if debugging on web
-  tryClaimTable();
+  if(qrCode){
+    setScanning(prev=>!prev); // comment out this line if debugging on web
+    tryClaimTable();
+  }
 },[qrCode]);
 
 React.useEffect(()=>{
@@ -395,7 +396,10 @@ return (
                     allOrderItems={allOrderItemsFromServer}
                     getAllOrderItems={getAllOrderItems}
                     tableNo={tableNo}
-                    shopName={shopName}/>
+                    shopName={shopName}
+                    claimed={claimed}
+                    syncClaimed={syncClaimed}
+                    updateTableInfo={updateTableInfo}/>
         <ShopCard name={items[0] && items[0].shop}/>
         {!claimed && <h6 className="scan-to-order">please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>

@@ -1,15 +1,14 @@
 import "./Item.css";
 import { MainContext, useContext } from "./Context";
 import { useIonToast } from "@ionic/react";
+import { Storage } from "@capacitor/storage";
 export default function Item(props: any){
     
     const [present, dismiss] = useIonToast();
-    const {id, name, price, description, quantity ,items} = props; 
+    const {id, name, price, description ,items, shop_id} = props; 
     
     
-    const {currentOrderItems, setCurrentOrderItems, currentPageDetails, axios, rootURL,
-    currentTableInfo} = useContext(MainContext);
-    const {shop_id, table_id} = currentPageDetails;
+    const {currentOrderItems, setCurrentOrderItems, axios, rootURL} = useContext(MainContext);
     
     const theItem = currentOrderItems.find((item: any)=> {
         if(item)
@@ -25,7 +24,7 @@ export default function Item(props: any){
     const isItemOnStock = async (id:number) => {
         try {
             const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/items/"+id);
-            return (data.item && data.item.quantity > 0)
+            return (data.item && data.item.quantity > 0);
           }
           catch (error: any) {
             if (axios.isAxiosError(error)) {
@@ -49,8 +48,10 @@ export default function Item(props: any){
         }
     }
     const onItemClick = async (id: number) => {
+        const currentShopId = (await Storage.get({key: "shop_id"})).value;
+        const atStock = await isItemOnStock(id);
         if(!theItem || theItem.quantity < 1){
-            if(shop_id === currentTableInfo.shop_id && await isItemOnStock(id)){
+            if((currentShopId==shop_id) && atStock){
                 const newItem = {
                     ...items.find((item: any)=>item.id===id),
                     quantity: 1
@@ -61,8 +62,9 @@ export default function Item(props: any){
                         newItem
                     ]
                 })
-            }else if(currentTableInfo.shop_id!==shop_id){
-                present("This item is not on the menu. You are probably looking at the wrong shop's menu.", 3000);
+            }else if(shop_id!=currentShopId){
+                // present("This item is not on the menu. You are probably looking at the wrong shop's menu.", 3000);
+                present(`current:${currentShopId} this id: ${shop_id}`, 3000);
             }else{    
                 present("Item is not currently at stock.",2000);
             }
