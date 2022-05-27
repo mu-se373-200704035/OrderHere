@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import OrderItem from "./OrderItem";
 import { MainContext, useContext } from "./Context";
 import { useIonToast, useIonAlert } from "@ionic/react";
+import TableDetails from "../pages/TableDetails";
 
 
 export default function TableDetailsComponent(props: any){
@@ -109,7 +110,7 @@ export default function TableDetailsComponent(props: any){
             </IonList>
             <h3 className="total-price">Total : ${totalPrices.bill}</h3>
 
-            {billElements[0] && <section className="flex-right">
+            {props.tableDetails && props.tableDetails.status!=0 && <section className="flex-right">
                 <button onClick={handleCheckOut}
                 className="send-order-btn">check table out</button>
             </section>}
