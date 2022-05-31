@@ -4,12 +4,14 @@ import { MainContext, useContext } from "../components/Context";
 import { useHistory } from "react-router";
 import { arrowBackOutline } from "ionicons/icons";
 import { Storage } from "@capacitor/storage";
+import { useIonToast } from "@ionic/react";
 
 const AdminMenu = () => {
 
-    const {setCurrentPageDetails} = useContext(MainContext);
+    const {setCurrentPageDetails, axios, rootURL, headers} = useContext(MainContext);
     const history = useHistory();
-    
+    const [present, dismiss] = useIonToast();
+
     const goBackToRoot = () => {
         setCurrentPageDetails((prevDetails: any)=>{
             return{
@@ -20,9 +22,31 @@ const AdminMenu = () => {
         history.push("/welcome");
     }
 
+    const destroySession = async () => {
+        try{
+            axios.delete(rootURL+"/auth/sign_out",{
+                headers: headers
+            });
+            return true;
+        }
+        catch(error: any){
+            if(axios.isAxiosError(error)){
+                console.log("error message:", error.message);
+            }else{
+                console.log("error:",error);
+            }
+            return false;
+        }   
+    }
+
     const logOut = async () => {
-        await Storage.remove({key: "session"});
-        goBackToRoot();
+        const status = await destroySession();
+        if(status){
+            await Storage.remove({key: "session"});
+            goBackToRoot();
+        }else{
+            present("Something went wrong!",2000);
+        }
     }
 
     return(
