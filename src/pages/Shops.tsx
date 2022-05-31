@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Shops.css';
-import React from 'react';
+import React, { useState } from 'react';
 //components
 import Searchbar from '../components/Searchbar';
 import ShopList from '../components/ShopList';
@@ -9,18 +9,36 @@ import { MainContext, useContext } from '../components/Context';
 import DisplayIcon from '../components/DisplayIcon';
 import { useHistory } from 'react-router';
 import { Storage } from '@capacitor/storage';
+import Spinner from '../components/Spinner';
 
 const Shops = () => {
-  
   const {rootURL, axios, claimed, setClaimed, setCurrentPageDetails, setShouldScan} = useContext(MainContext);
   const [shops, setShops] = React.useState([]);
   const history = useHistory();
+  const [query, setQuery] = useState<any>("");
+  const [spinnerActive, setSpinnerActive] = useState<boolean>(false);
 
   async function getShops() {
     try {
       const { data, status } = await axios.get(rootURL+"/shops");
       setShops(data);
     }
+    catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        console.log('error message: ', error.message);
+      } else {
+        console.log('unexpected error: ', error);
+      }
+    }
+  }
+
+  const searchShops = async (query: any) => {
+    try{
+      setSpinnerActive(true);
+      const {data} = await axios.get(rootURL+`/shops/search?q=${query}`)
+      setShops(data);
+      setSpinnerActive(false);
+    } 
     catch (error: any) {
       if (axios.isAxiosError(error)) {
         console.log('error message: ', error.message);
@@ -71,7 +89,14 @@ const Shops = () => {
           </IonToolbar>
         </IonHeader>
         
-        <Searchbar placeholder="search for shops"/>
+       {spinnerActive && <Spinner />}
+
+        <Searchbar
+        placeholder="search for shops"
+        search={searchShops}
+        query={query}
+        setQuery={setQuery}
+        />
         <ShopList shops={shops} title="shops"/>
       
       </IonContent>

@@ -1,0 +1,14 @@
+.search-btn{
+    background: var(--ion-color-primary);
+    padding: .4em;
+    border-bottom: solid 1px var(--ion-color-primary);
+    margin: 0;
+}
+.searchbar{
+    --padding-start: 1em;
+    margin-top: .3em;
+    border-bottom: solid 1px var(--ion-color-medium);
+}
+.searchbar-wrapper{
+    display: flex;
+}

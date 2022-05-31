@@ -4,7 +4,7 @@ import DisplayIcon from "../components/DisplayIcon";
 import "./Order.css";
 // react - ionic - 3rd party
 import { IonContent, IonHeader, IonPage, IonTitle, useIonToast, useIonPicker, IonToolbar, IonButtons, IonBackButton } from '@ionic/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { nanoid } from "nanoid";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Storage } from "@capacitor/storage";
@@ -15,6 +15,7 @@ import Item from "../components/Item";
 import ShopCard from "../components/ShopCard";
 import Searchbar from "../components/Searchbar";
 import OrderSlider from "../components/OrderSlider";
+import Spinner from "../components/Spinner";
 //interfaces
 import IItem from "../interfaces/IItem";
 
@@ -29,15 +30,17 @@ const Order = () => {
   
   // STATES***************************************************
   const axios: any = require("axios").default;
-  const [items, setItems] = React.useState<IItem[]>([]);
-  const [sliderActive, setSliderActive] = React.useState(false);
-  const [owner_id, setOwnerId] = React.useState<any>(null);
-  const [tableNo, setTableNo] = React.useState<any>(null);
-  const [allOrderItemsFromServer, setAllOrderItemsFromServer] = React.useState<any>(()=>[]);
+  const [items, setItems] = useState<IItem[]>([]);
+  const [sliderActive, setSliderActive] = useState(false);
+  const [owner_id, setOwnerId] = useState<any>(null);
+  const [tableNo, setTableNo] = useState<any>(null);
+  const [allOrderItemsFromServer, setAllOrderItemsFromServer] = useState<any>(()=>[]);
   const {shop_id, table_id} = currentPageDetails;
-  const [pickerValue, setPickerValue] = React.useState<any>("");
-  const [qrCode, setQrCode] = React.useState<any>(null);
-  const [scanning, setScanning] = React.useState(false);
+  const [pickerValue, setPickerValue] = useState<any>("");
+  const [qrCode, setQrCode] = useState<any>(null);
+  const [scanning, setScanning] = useState(false);
+  const [query, setQuery] = useState<any>("");
+  const [spinnerActive, setSpinnerActive] = useState<boolean>(false);
 
   
   // GETTING AND PROCESSING THE ITEMS**************************
@@ -92,6 +95,22 @@ const Order = () => {
         </div>
     )
   })
+
+  const searchItems = async (query:any) => {
+    try{
+      setSpinnerActive(true);
+      const {data} = await axios.get(rootURL+`/shops/${shop_id}/items/search?q=${query}`)
+      setItems(data);
+    }
+    catch(error: any){
+      if(axios.isAxiosError(error)){
+        console.log("error message:",error.message);
+      }else{
+        console.log("error:",error);
+      }
+    }
+    setSpinnerActive(false);
+  }
 
  // GETTING ORDER ITEMS
  async function getAllOrderItems(){
@@ -279,13 +298,11 @@ async function syncClaimed(){
   const tableno = await Storage.get({key: "table_no"});
   setTableNo(tableno.value);
   const tableId = await Storage.get({key: "table_id"});
-  const shopid = await Storage.get({key: "shop_id"});
   if(claimed){
     setCurrentPageDetails((prevState: any)=>{
       return{
         ...prevState,
         table_id: tableId.value,
-        shop_id: shopid.value,
       };
     });
   }
@@ -392,9 +409,6 @@ async function postWaiterRequest(){
     }
   }
 }
-
-
-
 return (
   <IonPage>
       <IonHeader>
@@ -424,6 +438,9 @@ return (
           </IonToolbar>
         </IonHeader>
         {/* <button onClick={triggerQrCodeChange}>Trigger qr</button> */}
+
+        {spinnerActive && <Spinner />}
+
         <OrderSlider slider={sliderActive}
                     setSlider={setSliderActive}
                     owner_id={owner_id}
@@ -437,7 +454,12 @@ return (
         <ShopCard name={items[0] && items[0].shop}/>
         {!claimed && <h6 className="scan-to-order">please scan a qr code and claim a table to be able to order.</h6>}
         <h1 className="menu">menu</h1>
-        <Searchbar placeholder="search for items"/>
+        <Searchbar
+        placeholder="search for items"
+        query={query}
+        setQuery={setQuery}
+        search={searchItems}
+        />
         {itemsList}
 
         
