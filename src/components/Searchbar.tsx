@@ -4,20 +4,10 @@ import DisplayIcon from "./DisplayIcon";
 
 export default function Searchbar(props: any){
 
-    const query: string = props.query;
-    const processQuery = (query: string) => {
-        const words = query.trim().split(" ");
-        let finalQuery: string = "";
-        words.forEach((word: string)=> {
-            const lower = word.toLowerCase();
-            const first = word.charAt(0);
-            const cap = first.toUpperCase();
-            const finalWord = cap + lower.slice(1);
-            finalQuery += finalWord + " ";
-        });
-        return finalQuery.slice(0,finalQuery.length);
+    const process = (query: string) => {
+        const trimmed = query.trim();
+        return trimmed.toLowerCase();
     }
-
     return(
         <div className="searchbar-wrapper">
             <IonInput
@@ -28,7 +18,7 @@ export default function Searchbar(props: any){
             >
             </IonInput>
             
-            <button onClick={()=>props.search(processQuery(query))} className="search-btn">
+            <button onClick={()=>props.search(process(props.query))} className="search-btn">
                 <DisplayIcon icon="searchIcon" fill="var(--ion-color-light)"/>
             </button>
         </div>
