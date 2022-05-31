@@ -33,6 +33,7 @@ import Root from './pages/Root';
 import ISession from './interfaces/ISession';
 import AdminTables from './pages/AdminTables';
 import TableDetails from './pages/TableDetails';
+import AdminMenu from './pages/AdminMenu';
 
 setupIonicReact();
 
@@ -87,6 +88,10 @@ const App: React.FC = () => {
           
           <Route exact path="/admin/tables/details">
             <TableDetails />
+          </Route>
+          
+          <Route exact path="/admin/menu">
+            <AdminMenu />
           </Route>
 
           <Route exact path="/register">

@@ -125,7 +125,7 @@ const AdminOrders = () => {
         }
     });
     history.push("/welcome");
-}
+  }
 
   return (
     <IonPage>

@@ -30,7 +30,15 @@ export default function TabBar(props: any){
         }
     }
     const gotoMenuTab = () => {
-
+        if(!(history.location.pathname==="/admin/menu")){
+            setCurrentPageDetails((prevDetails: any)=>{
+                return{
+                    ...prevDetails,
+                    page: "/admin/menu"
+                }
+            });
+            history.push("/admin/menu");
+        }
     }
 
     const ordersClass = props.page==="/admin/orders"  ? "tab tab-selected": "tab";
@@ -50,7 +58,7 @@ export default function TabBar(props: any){
                     <p>Tables</p>
                 </div>
             </div>
-            <div className="tab">
+            <div onClick={gotoMenuTab} className={menuClass}>
                 <div className="tab-details">
                     <DisplayIcon className="tab-icon" icon="menuIcon" fill={menuClass.includes("selected")? "var(--ion-color-light)":"var(--ion-color-dark)"} />
                     <p>Menu</p>
