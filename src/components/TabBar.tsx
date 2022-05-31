@@ -1,6 +1,7 @@
 import "./TabBar.css";
 import { useHistory } from "react-router"
 import { MainContext, useContext } from "./Context";
+import DisplayIcon from "./DisplayIcon";
 
 export default function TabBar(props: any){
     
@@ -38,13 +39,22 @@ export default function TabBar(props: any){
     return(
         <nav className="tabs">
             <div onClick={gotoOrdersTab} className={ordersClass}>
-                Orders
+                <div className="tab-details">
+                    <DisplayIcon className="tab-icon" icon="tabReceiptIcon" fill={ordersClass.includes("selected")? "var(--ion-color-light)":"var(--ion-color-dark)"} />
+                    <p>Orders</p>
+                </div>
             </div>
             <div onClick={gotoTablesTab} className={tablesClass}>
-                Tables
+                <div className="tab-details">
+                    <DisplayIcon className="tab-icon" icon="tableIcon" fill={tablesClass.includes("selected")? "var(--ion-color-light)":"var(--ion-color-dark)"} />
+                    <p>Tables</p>
+                </div>
             </div>
             <div className="tab">
-                Menu
+                <div className="tab-details">
+                    <DisplayIcon className="tab-icon" icon="menuIcon" fill={menuClass.includes("selected")? "var(--ion-color-light)":"var(--ion-color-dark)"} />
+                    <p>Menu</p>
+                </div>
             </div>
         </nav>
     )

@@ -22,6 +22,20 @@ export default function DisplayIcon(props: any){
     else if(props.icon === "checkIcon"){
         icon = {xmlns:"http://www.w3.org/2000/svg",pathD:"M18.9 35.7 7.7 24.5 9.85 22.35 18.9 31.4 38.1 12.2 40.25 14.35Z"}
     }
+    else if(props.icon === "tabReceiptIcon"){
+        icon = {xmlns:"http://www.w3.org/2000/svg",pathD:"M6 43.95V4.05L9 7.05L12 4.05L15 7.05L18 4.05L21 7.05L24 4.05L27 7.05L30 4.05L33 7.05L36 4.05L39 7.05L42 4.05V43.95L39 40.95L36 43.95L33 40.95L30 43.95L27 40.95L24 43.95L21 40.95L18 43.95L15 40.95L12 43.95L9 40.95ZM11.85 33.2H36.35V30.2H11.85ZM11.85 25.5H36.35V22.5H11.85ZM11.85 17.75H36.35V14.75H11.85ZM9 38.9H39V9.1H9ZM9 9.1V38.9Z"}
+    }
+    else if(props.icon === "tableIcon"){
+        icon = {xmlns:"http://www.w3.org/2000/svg",pathD:"M7.3 19H40.65L38.4 11H9.65ZM24 15ZM34.6 22H13.45L12.75 27H35.25ZM8 40 10.45 22H6Q5 22 4.425 21.2Q3.85 20.4 4.1 19.45L6.95 9.45Q7.15 8.8 7.65 8.4Q8.15 8 8.85 8H39.15Q39.85 8 40.35 8.4Q40.85 8.8 41.05 9.45L43.9 19.45Q44.15 20.4 43.575 21.2Q43 22 42 22H37.6L40 40H37L35.65 30H12.35L11 40Z"}
+    }
+    else if(props.icon === "menuIcon"){
+        icon = {xmlns:"http://www.w3.org/2000/svg",pathD:"M6 36V33H42V36ZM6 25.5V22.5H42V25.5ZM6 15V12H42V15Z"}
+        return(
+            <svg xmlns={icon.xmlns} viewBox="0 0 48 48" height="32" width="32" fill={props.fill}>
+                <path d={icon.pathD} />
+            </svg>
+        )
+    }
     return(
         <svg xmlns={icon.xmlns} viewBox="0 0 48 48" height="30" width="30" fill={props.fill}>
             <path d={icon.pathD} />
