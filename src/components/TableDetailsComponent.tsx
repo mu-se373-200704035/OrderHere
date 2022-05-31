@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import OrderItem from "./OrderItem";
 import { MainContext, useContext } from "./Context";
 import { useIonToast, useIonAlert } from "@ionic/react";
-import TableDetails from "../pages/TableDetails";
+
 
 
 export default function TableDetailsComponent(props: any){
@@ -60,6 +60,22 @@ export default function TableDetailsComponent(props: any){
           }
     }
 
+    const handleCancelOrder = async () => {
+      try{
+        const res = await axios.delete(rootURL+`/shops/${shop_id}/tables/${table_id}/order_items`,headers);
+        if(res.status === 200){
+          present("The order is canceled.",1500);
+          props.getTableDetails();
+        }
+      }catch(error: any){
+        if(axios.isAxiosError(error)){
+          console.log("error message:",error.message)
+        }else{
+          console.log("error:", error);
+        }
+      }
+    }
+
     const emptyTable = async () => {
         try{
             const res = await axios.put(rootURL+`/shops/${shop_id}/tables/${table_id}`,{table:{status:0}},{headers:headers});
@@ -97,7 +113,7 @@ export default function TableDetailsComponent(props: any){
             <h3 className="total-price">Total : ${totalPrices.notDelivered}</h3>
             
             {notDeliveredElements[0] && <section className="order-slider-buttons">
-                <button className="add-order-item-btn">cancel the order</button>
+                <button onClick={handleCancelOrder} className="add-order-item-btn">cancel the order</button>
                 <button onClick={handleComplete}
                 className="send-order-btn">complete order</button>
             </section>}
