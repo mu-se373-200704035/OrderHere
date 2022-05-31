@@ -180,7 +180,7 @@ export default function OrderSlider(props: any){
           <section style={sliderStyle} className="order-slider">
             <h1 className="shop-table-title">{props.shopName} - {props.tableNo}</h1>
             <h2 className="title">current order</h2>
-            <IonList className="list-bg">
+            <IonList className="list-dark">
               {currentOrderItemElements}
             </IonList>
             {!currentOrderItemElements[0] && <p className="add-items-paragraph">add items to this list, tap send order and start waiting</p>}
@@ -192,14 +192,14 @@ export default function OrderSlider(props: any){
             <div className="divider-line"></div>
 
             <h2 className="title">waiting for delivery</h2>
-            <IonList className="list-bg">
+            <IonList className="list-dark">
               {notDeliveredElements}
             </IonList>
             <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>
             <div className="divider-line"></div>
 
             <h2 className="title">bill</h2>
-            <IonList className="list-bg">
+            <IonList className="list-dark">
               {billElements}
             </IonList>
             <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
