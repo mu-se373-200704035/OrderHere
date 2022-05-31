@@ -235,7 +235,13 @@ async function tryClaimTable(){
         setClaimed(true);
         setScanning(false);
         present(`successfully claimed the table ${data.table.table_no}`,1500);
-        setCurrentPageDetails((prevState: any)=>{return {...prevState, table_id: table_id}})
+        setCurrentPageDetails((prevState: any)=>{
+          return {
+            ...prevState,
+            shop_id: data.table.shop_id,
+            table_id: data.table.id
+          }
+        });
         return true;
       }
     }else{
@@ -303,9 +309,9 @@ React.useEffect(()=>{
 },[pickerValue])
 
 // to debug on web 
-// function triggerQrCodeChange(){
-//   setQrCode("1-2");
-// }
+function triggerQrCodeChange(){
+  setQrCode("1-2");
+}
 
 function toggleSlider(){
   setSliderActive(prevState=>!prevState);
@@ -374,9 +380,9 @@ return (
               <h6 className="extra-small">waiter</h6>
             </button>}
           
-          {claimed && <button className="header-btn" slot="end" onClick={toggleSlider}>
+          <button className="header-btn" slot="end" onClick={toggleSlider}>
             <DisplayIcon icon="receiptIcon" fill="var(--ion-color-dark)"></DisplayIcon>
-          </button>}
+          </button>
           
           {!claimed && <button className="header-btn qr-btn" slot="end" onClick={scanQRCode}>
             <DisplayIcon icon="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>

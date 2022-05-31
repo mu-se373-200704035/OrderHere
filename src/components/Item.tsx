@@ -63,8 +63,7 @@ export default function Item(props: any){
                     ]
                 })
             }else if(shop_id!=currentShopId){
-                // present("This item is not on the menu. You are probably looking at the wrong shop's menu.", 3000);
-                present(`current:${currentShopId} this id: ${shop_id}`, 3000);
+                present("This item is not on the menu. You are probably looking at the wrong shop's menu or you haven't claimed a table.", 4000);
             }else{    
                 present("Item is not currently at stock.",2000);
             }
