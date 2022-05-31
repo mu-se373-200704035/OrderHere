@@ -26,20 +26,28 @@ const AdminOrders = () => {
   const [sliderActive, setSliderActive] = useState<boolean>(false);
 
   const checkSession = async () => {
-    const [data, status, headers] = await getSessionFromStorage();
-    if (status===200){
-      setLoggedIn(true);
-      setHeaders(headers);
-      setCurrentPageDetails((prevDetails: any)=>{
-        return{
-          ...prevDetails,
-          "shop_id" : data.shop_id
-        }
-      })
-      getOrderItems(data.shop_id, headers);
-      console.log("checked")
-    }
-    else{
+    const res = await getSessionFromStorage();
+    if(res){
+      if (res.status===200){
+        setLoggedIn(true);
+        setHeaders(res.headers);
+        setCurrentPageDetails((prevDetails: any)=>{
+          return{
+            ...prevDetails,
+            "shop_id" : res.data.shop_id
+          }
+        })
+      }
+      else{
+        setCurrentPageDetails((prevDetails:any)=>{
+          return{
+            ...prevDetails,
+            page: "/login"
+          }
+        })
+        history.push("/login");
+      }
+    }else{
       setCurrentPageDetails((prevDetails:any)=>{
         return{
           ...prevDetails,
@@ -101,8 +109,10 @@ const AdminOrders = () => {
       checkSession();
     }
   },[currentPageDetails.page])
+
   useEffect(()=>{
     if(loggedIn && currentPageDetails.page==="/admin/orders"){
+      getOrderItems(currentPageDetails.shop_id, headers);
       getRequests();
     }
   },[currentPageDetails])

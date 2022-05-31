@@ -65,7 +65,7 @@ export default function TableDetailsComponent(props: any){
             const res = await axios.put(rootURL+`/shops/${shop_id}/tables/${table_id}`,{table:{status:0}},{headers:headers});
             present("The table is now empty again.",1500);
             props.getTableDetails();
-            props.checkSession();
+            props.getTables();
         }
           catch (error: any) {
             if (axios.isAxiosError(error)) {
@@ -85,7 +85,7 @@ export default function TableDetailsComponent(props: any){
               'Cancel',
               { text: 'I agree', handler: () => emptyTable() },
             ],
-            onDidDismiss: () => console.log('dismissed'),
+            onDidDismiss: () => {},
           })
     }
     return(

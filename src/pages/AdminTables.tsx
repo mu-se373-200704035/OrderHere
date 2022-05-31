@@ -1,5 +1,5 @@
-import { IonIcon ,IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { IonIcon, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from "@ionic/react";
+import { useEffect } from "react";
 import { MainContext, useContext } from "../components/Context";
 import TabBar from "../components/TabBar";
 import TablesList from "../components/TablesList";
@@ -15,31 +15,6 @@ const AdminTables = () => {
         setCurrentPageDetails, headers, setHeaders,
         loggedIn, setLoggedIn, tables, setTables} = useContext(MainContext);
     const history = useHistory();
-
-    const checkSession = async () => {
-        const [data, status, headers] = await getSessionFromStorage();
-        if (status===200){
-          setLoggedIn(true);
-          setHeaders(headers);
-          setCurrentPageDetails((prevDetails: any)=>{
-            return{
-              ...prevDetails,
-              "shop_id" : data.shop_id
-            }
-          })
-          getTables();
-        }
-        else{
-          setCurrentPageDetails((prevDetails:any)=>{
-            return{
-              ...prevDetails,
-              page: "/login"
-            }
-          })
-          history.push("/login");
-        }
-      }
-
 
     const getTables = async () => {
         try{
@@ -59,10 +34,10 @@ const AdminTables = () => {
 
 
     useEffect(()=>{
-      if(currentPageDetails.page==="/admin/tables"){
-        checkSession();
+      if(currentPageDetails.page.includes("/admin/tables") && loggedIn){
+        getTables();
       }
-      },[currentPageDetails.page])
+    },[currentPageDetails.page])
 
     const goBackToRoot = () => {
         setCurrentPageDetails((prevDetails: any)=>{

@@ -32,20 +32,22 @@ const Login = () => {
 
   // SESSION***********************************************
   const checkSession = async ()=>{
-    const [data, status, headers] = await getSessionFromStorage();
-    if(status===200){
-      setLoggedIn(true);
-      setHeaders(headers);
-      setCurrentPageDetails((prevDetails: any)=>{
-        return{
-          ...prevDetails,
-          "shop_id" : data.shop_id
-        }
-      })
-      goToAdminOrders();
-    }else{
-      console.log("session is not available!");
-      present("Session may be expired!",2000);
+    const res = await getSessionFromStorage();
+    if(res){
+      if(res.status===200){
+        setLoggedIn(true);
+        setHeaders(res.headers);
+        setCurrentPageDetails((prevDetails: any)=>{
+          return{
+            ...prevDetails,
+            "shop_id" : res.data.shop_id
+          }
+        })
+        goToAdminOrders();
+      }else{
+        console.log("session is not available!");
+        present("Session may be expired!",2000);
+      }
     }
   }
 

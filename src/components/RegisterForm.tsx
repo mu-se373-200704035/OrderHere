@@ -10,8 +10,8 @@ import IFormValidation from "../interfaces/IFormValidation";
     
 export default function RegisterForm(){
     const [present, dismiss] = useIonToast();
-    const {currentPageDetails, setCurrentPageDetails, axios, rootURL, 
-            session, setSession} = useContext(MainContext);
+    const {setCurrentPageDetails, axios, rootURL, 
+            setSession} = useContext(MainContext);
 
     const history = useHistory();
     // form data states

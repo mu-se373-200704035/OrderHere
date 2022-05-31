@@ -29,31 +29,6 @@ const TableDetails = () => {
           }
     }
 
-    const checkSession = async () => {
-        const [data, status, headers] = await getSessionFromStorage();
-        if (status===200){
-          setLoggedIn(true);
-          setHeaders(headers);
-          setCurrentPageDetails((prevDetails: any)=>{
-            return{
-              ...prevDetails,
-              "shop_id" : data.shop_id
-            }
-          })
-          getTables();
-        }
-        else{
-          setCurrentPageDetails((prevDetails:any)=>{
-            return{
-              ...prevDetails,
-              page: "/login"
-            }
-          })
-          history.push("/login");
-        }
-      }
-
-
     const getTables = async () => {
         try{
             const res = await axios.get(rootURL+`/shops/${currentPageDetails.shop_id}/tables`,{
@@ -94,7 +69,7 @@ const TableDetails = () => {
                 
                 <TableDetailsComponent tableDetails={tableDetails}
                                         getTableDetails={getTableDetails}
-                                        checkSession={checkSession}/>
+                                        getTables={getTables}/>
 
             </IonContent>
         </IonPage>
