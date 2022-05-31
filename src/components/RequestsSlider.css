@@ -12,4 +12,11 @@
     margin:0;
     margin-top: 1em;
     padding: 1em;
+    color: var(--ion-color-primary);
+    font-weight: bold;
+}
+.no-waiter-requests{
+    text-align:center;
+    max-width: 85%;
+    margin: 0 auto;
 }

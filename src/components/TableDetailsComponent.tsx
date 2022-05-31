@@ -106,12 +106,14 @@ export default function TableDetailsComponent(props: any){
     }
     return(
         <div>
-            <h2 className="title">waiting for delivery</h2>
+            <h2 className="table-details-title">waiting for delivery</h2>
             <IonList>
               {notDeliveredElements}
             </IonList>
-            <h3 className="total-price">Total : ${totalPrices.notDelivered}</h3>
-            
+            <section className="total">
+              <h3 className="total-title">Total</h3>
+              <h3 className="total-price"><span>$</span>{totalPrices.notDelivered}</h3>
+            </section>
             {notDeliveredElements[0] && <section className="order-slider-buttons">
                 <button onClick={handleCancelOrder} className="add-order-item-btn">cancel the order</button>
                 <button onClick={handleComplete}
@@ -124,8 +126,10 @@ export default function TableDetailsComponent(props: any){
             <IonList>
               {billElements}
             </IonList>
-            <h3 className="total-price">Total : ${totalPrices.bill}</h3>
-
+            <section className="total">
+              <h3 className="total-title">Total</h3>
+              <h3 className="total-price"><span>$</span>{totalPrices.bill}</h3>
+            </section>
             {props.tableDetails && props.tableDetails.status!=0 && <section className="flex-right">
                 <button onClick={handleCheckOut}
                 className="send-order-btn">check table out</button>

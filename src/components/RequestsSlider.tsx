@@ -20,6 +20,7 @@ export default function RequestsSlider(props: any){
         <div style={sliderStyle} className="requests-slider">
             <h4 className="requests-title">Requests</h4>
             <IonList>
+                {!requestElements[0] && <h5 className="no-waiter-requests">There are no waiter requests</h5>}
                 {requestElements}
             </IonList>
         </div>

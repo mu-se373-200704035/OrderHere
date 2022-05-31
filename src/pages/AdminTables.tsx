@@ -58,11 +58,11 @@ const AdminTables = () => {
                         <IonButton onClick={goBackToRoot}>
                             <IonIcon icon={arrowBackOutline}></IonIcon>
                         </IonButton>
-                        <IonTitle>Tables</IonTitle>
+                        <IonTitle className="font-inter" >Tables</IonTitle>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent className="font-inter" fullscreen>
                 <IonHeader collapse="condense">
                 <IonToolbar>
                     <IonTitle size="large">Orders</IonTitle>

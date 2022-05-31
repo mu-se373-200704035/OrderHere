@@ -11,11 +11,11 @@ const Register = () => {
             <IonToolbar>
               <IonButtons>
                 <IonBackButton></IonBackButton>
-                <IonTitle>Register</IonTitle>
+                <IonTitle className="font-inter" >Register</IonTitle>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent fullscreen>
+          <IonContent className="font-inter" fullscreen>
             <IonHeader collapse="condense">
               <IonToolbar>
                 <IonTitle size="large">Register</IonTitle>

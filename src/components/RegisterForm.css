@@ -27,7 +27,7 @@
     outline: none;
     caret-color: var(--ion-color-primary);
     transition: ease-in 100ms;
-    border-bottom-color: var(--ion-color-secondary-tint);
+    border-bottom-color: var(--ion-color-tertiary);
 }
 .register-buttons{
     margin-top: 2em;
@@ -42,7 +42,7 @@
     transition: ease-in 100ms;
 }
 .register-btn:active{
-    background-color: var(--ion-color-secondary-tint);
+    background-color: var(--ion-color-tertiary);
 }
 .goto-login-btn{
     padding: 1em;
@@ -52,8 +52,8 @@
 }
 .goto-login-btn:active{
     transition: ease-in 100ms;
-    border-bottom-color: var(--ion-color-secondary-tint);
-    color: var(--ion-color-secondary-tint);
+    border-bottom-color: var(--ion-color-tertiary);
+    color: var(--ion-color-tertiary);
 }
 .decorative-rect{
     position: fixed;
@@ -75,7 +75,7 @@
         color: var(--ion-color-dark-shade)
     }
     .form-input::placeholder{
-        color: var(--ion-color-secondary-shade);
+        color: var(--ion-color-medium-shade);
     }
     .form-input:focus{
         caret-color: var(--ion-color-secondary);

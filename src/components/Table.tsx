@@ -3,19 +3,24 @@ import { MainContext, useContext } from "./Context";
 import "./Table.css";
 export default function Table(props: any){
     
+    let bg;
     let color;
     if(props.status===0){
-        color = "var(--ion-color-secondary)";
+        bg = "var(--ion-color-secondary)";
+        color = "var(--ion-color-dark)";
     }else if(props.status===1){
-        color = "var(--ion-color-primary)";
+        bg = "var(--ion-color-primary)";
+        color = "var(--ion-color-light)";
     }else if(props.status===2){
-        color = "var(--ion-color-secondary-tint)";
+        bg = "#297B8D";
+        color = "var(--ion-color-light)";
     }else{
-        color = "#DEDEDE";
+        bg = "#DEDEDE";
     }
 
     const colorStyle = {
-        background: color
+        background: bg,
+        color: color
     }
     
     const {setCurrentPageDetails} = useContext(MainContext);

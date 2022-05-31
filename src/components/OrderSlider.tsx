@@ -195,14 +195,21 @@ export default function OrderSlider(props: any){
             <IonList className="list-dark">
               {notDeliveredElements}
             </IonList>
-            <h3 className="total-price">Total : ${totalPrices.notDeliveredTotal}</h3>
+            <section className="total">
+              <h3 className="total-title">Total</h3>
+              <h3 className="total-price"><span>$</span>{totalPrices.notDeliveredTotal}</h3>
+            </section>
             <div className="divider-line"></div>
 
             <h2 className="title">bill</h2>
             <IonList className="list-dark">
               {billElements}
             </IonList>
-            <h3 className="total-price">Total : ${totalPrices.billTotal}</h3>
+            <section className="total">
+              <h3 className="total-title">Total</h3>
+              <h3 className="total-price"><span>$</span>{totalPrices.billTotal}</h3>
+            </section>
+            <div className="divider-line"></div>
 
             <div className="order-slider-buttons">
               {props.claimed && <button onClick={alertCheckOut} className="send-order-btn">check out</button>}

@@ -3,3 +3,10 @@
     justify-content: right;
     margin-right: 2.5%;
 }
+.table-details-title{
+    font-weight: 600;
+    font-size: 1.5em;
+    color: var(--ion-color-primary);
+    padding-left: .4em;
+    margin-top: 1em;
+}

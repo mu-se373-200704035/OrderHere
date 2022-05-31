@@ -28,7 +28,7 @@ const Root = () => {
 
     return (
         <IonPage>
-          <IonContent fullscreen>
+          <IonContent className="font-inter" fullscreen>
             <section onClick={gotoShops} className="root customer">
                 <h1>I am a customer</h1>
             </section>

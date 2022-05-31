@@ -121,7 +121,7 @@ export default function Item(props: any){
                         +
                     </div>    
                 </div>}
-                <h3 className="item-price">${price}</h3>
+                <h3 className="item-price"><span>$</span>{price}</h3>
             </div>
             {description && <h4 className="item-desc">{description}</h4>}
         </section>

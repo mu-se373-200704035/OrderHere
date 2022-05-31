@@ -4,6 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import React, { useState } from 'react';
 import { MainContext } from './components/Context';
 import IItem from "./interfaces/IItem";
+import "./global.css";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

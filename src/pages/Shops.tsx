@@ -75,14 +75,14 @@ const Shops = () => {
         <IonToolbar>
           <IonButtons>
             <IonBackButton></IonBackButton>
-            <IonTitle>Shops</IonTitle>
+            <IonTitle className="font-inter" >Shops</IonTitle>
             {!claimed && <button className="header-btn qr-btn" slot="end" onClick={gotoOrderPageAndScan}>
             <DisplayIcon icon="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
           </button>}
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent className="font-inter" fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Shops</IonTitle>

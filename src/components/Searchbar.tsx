@@ -11,7 +11,7 @@ export default function Searchbar(props: any){
     return(
         <div className="searchbar-wrapper">
             <IonInput
-            className="searchbar"
+            className="searchbar font-inter"
             placeholder={props.placeholder}
             value={props.query}
             onIonChange={(e)=>props.setQuery(e.detail.value)}
@@ -19,7 +19,7 @@ export default function Searchbar(props: any){
             </IonInput>
             
             <button onClick={()=>props.search(process(props.query))} className="search-btn">
-                <DisplayIcon icon="searchIcon" fill="var(--ion-color-light)"/>
+                <DisplayIcon icon="searchIcon" fill="var(--search-icon)"/>
             </button>
         </div>
     )

@@ -52,11 +52,11 @@ const TableDetails = () => {
                 <IonToolbar>
                     <IonButtons>
                         <IonBackButton></IonBackButton>
-                        <IonTitle>Table {currentPageDetails.table_no}</IonTitle>
+                        <IonTitle className="font-inter" >Table {currentPageDetails.table_no}</IonTitle>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent className="font-inter" fullscreen>
                 <IonHeader collapse="condense">
                 <IonToolbar>
                     <IonTitle size="large">Table {currentPageDetails.table_no}</IonTitle>

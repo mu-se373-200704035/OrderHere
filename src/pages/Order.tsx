@@ -415,7 +415,7 @@ return (
         <IonToolbar>
           <IonButtons>
             <IonBackButton></IonBackButton>
-            <IonTitle>Order</IonTitle>
+            <IonTitle className="font-inter">Order</IonTitle>
           </IonButtons>
           {claimed && <button className="header-btn" slot="end" onClick={requestWaiter}>
               <DisplayIcon icon="requestWaiterIcon" fill="var(--ion-color-dark)"></DisplayIcon>
@@ -431,7 +431,7 @@ return (
           </button>}
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen hidden={scanning}>
+      <IonContent className="order-page font-inter" fullscreen hidden={scanning}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Order</IonTitle>

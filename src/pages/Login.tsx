@@ -62,11 +62,11 @@ const Login = () => {
             <IonToolbar>
               <IonButtons>
                 <IonBackButton></IonBackButton>
-            <IonTitle>Login</IonTitle>
+            <IonTitle className="font-inter" >Login</IonTitle>
           </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent fullscreen>
+          <IonContent className="font-inter" fullscreen>
             <IonHeader collapse="condense">
               <IonToolbar>
                 <IonTitle size="large">Login</IonTitle>

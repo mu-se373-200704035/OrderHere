@@ -11,12 +11,13 @@
 }
 .shop-name{
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 600;
+    color: white;
 }
 
 @media (prefers-color-scheme: dark){
     .shop-card{
         background: var(--ion-color-secondary);
-        color: white;
+        color: #DDD;
     }
 }

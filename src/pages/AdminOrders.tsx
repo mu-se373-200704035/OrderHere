@@ -135,7 +135,7 @@ const AdminOrders = () => {
             <IonButton onClick={goBackToRoot}>
               <IonIcon icon={arrowBackOutline}></IonIcon>
             </IonButton>
-            <IonTitle>Orders</IonTitle>
+            <IonTitle className="font-inter" >Orders</IonTitle>
             <button onClick={()=>setSliderActive((prev: boolean)=> !prev)} className="requests-slider-btn">
               {requests.length>0 && <div className="notifications">{requests.length}</div>}
               <DisplayIcon icon="requestWaiterIcon" fill="var(--ion-color-dark-shade)"/>
@@ -143,7 +143,7 @@ const AdminOrders = () => {
         </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent className="font-inter" fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Orders</IonTitle>

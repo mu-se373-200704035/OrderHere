@@ -7,16 +7,14 @@
     padding: .5em;
     transition: ease-in-out 25ms;
 }
-.item-wrapper:active{
-    background: var(--ion-color-secondary-shade);
-}
 .item-topline{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .item-name{
-    font-size: 1rem;
+    font-size: .9em;
+    font-weight: 500;
     margin: 0;
 }
 .item-price{
@@ -24,6 +22,11 @@
     margin: 0;
     min-width: 2em;
     text-align: right;
+}
+.item-price > span{
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--ion-color-primary)
 }
 .item-desc{
     font-size: .7rem;

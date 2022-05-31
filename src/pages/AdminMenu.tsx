@@ -57,11 +57,11 @@ const AdminMenu = () => {
                     <IonButton onClick={goBackToRoot}>
                     <IonIcon icon={arrowBackOutline}></IonIcon>
                     </IonButton>
-                    <IonTitle>Orders</IonTitle>
+                    <IonTitle className="font-inter" >Orders</IonTitle>
                 </IonButtons>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent className="font-inter" fullscreen>
                 <IonHeader collapse="condense">
                 <IonToolbar>
                     <IonTitle size="large">Orders</IonTitle>
@@ -70,7 +70,7 @@ const AdminMenu = () => {
 
                 <IonList>
                     <IonItem onClick={logOut}>
-                        <IonText color="danger">Log out</IonText>
+                        <IonText className="font-inter" color="danger">Log out</IonText>
                     </IonItem>
                 </IonList>
 
