@@ -49,6 +49,9 @@ const App: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = useState<string>();
   const [tables, setTables] = useState<any>();
+  const [shouldScan, setShouldScan] = useState<boolean>(false);
+  const [claimed, setClaimed] = React.useState<any>(false);
+
 
   
   const data:any = {
@@ -62,6 +65,8 @@ const App: React.FC = () => {
     loggedIn,           setLoggedIn,
     selectedTab,        setSelectedTab,
     tables,             setTables,
+    shouldScan,         setShouldScan,
+    claimed,            setClaimed
   }
 
   return(

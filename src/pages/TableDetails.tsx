@@ -2,16 +2,13 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, Io
 import { useEffect, useState } from "react";
 import { MainContext, useContext } from "../components/Context";
 import TableDetailsComponent from "../components/TableDetailsComponent";
-import { getSessionFromStorage } from "../services/SessionServices";
-import { useHistory } from "react-router";
+
 const TableDetails = () => {
     
-    const {currentPageDetails, setCurrentPageDetails, rootURL, axios,
-        headers, setHeaders, setTables,
-    loggedIn, setLoggedIn,} = useContext(MainContext);
+    const {currentPageDetails, rootURL, axios,
+        headers, setTables} = useContext(MainContext);
     const {shop_id, table_id} = currentPageDetails;
     const [tableDetails, setTableDetails] = useState<any>();
-    const history = useHistory();
 
     const getTableDetails = async () => {
         try{
@@ -44,7 +41,6 @@ const TableDetails = () => {
             }
           }
     }
-
 
     useEffect(()=>{
         getTableDetails();

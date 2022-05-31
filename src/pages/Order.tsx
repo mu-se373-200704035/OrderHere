@@ -23,27 +23,27 @@ const Order = () => {
   const [present, dismiss] = useIonToast();
   const [presentPicker] = useIonPicker();
   
-  // STATES***************************************************
+  // CONTEXT
   const {currentPageDetails,setCurrentPageDetails, rootURL,
-        setCurrentTableInfo} = useContext(MainContext);
+        setCurrentTableInfo, shouldScan, setShouldScan, claimed, setClaimed} = useContext(MainContext);
+  
+  // STATES***************************************************
   const axios: any = require("axios").default;
   const [items, setItems] = React.useState<IItem[]>([]);
   const [sliderActive, setSliderActive] = React.useState(false);
-  const [scanning, setScanning] = React.useState(false);
-  const [qrCode, setQrCode] = React.useState<any>(null);
-  const [claimed, setClaimed] = React.useState<any>(false);
   const [owner_id, setOwnerId] = React.useState<any>(null);
   const [tableNo, setTableNo] = React.useState<any>(null);
   const [allOrderItemsFromServer, setAllOrderItemsFromServer] = React.useState<any>(()=>[]);
   const {shop_id, table_id} = currentPageDetails;
-  const [shopName, setShopName] = React.useState<any>("");
   const [pickerValue, setPickerValue] = React.useState<any>("");
+  const [qrCode, setQrCode] = React.useState<any>(null);
+  const [scanning, setScanning] = React.useState(false);
 
   
   // GETTING AND PROCESSING THE ITEMS**************************
-  async function getShopItems() {
+  async function getShopItems(shop_id: any) {
     try {
-      const { data, status } = await axios.get(rootURL+"/shops/"+currentPageDetails.shop_id+"/items");
+      const { data, status } = await axios.get(rootURL+"/shops/"+shop_id+"/items");
       setItems(data);
       categorizeItems();
     }
@@ -140,7 +140,37 @@ const Order = () => {
     res && startScan();
   });
 }
+const startScanFromShops = async () => {
+  setShouldScan(false);
+  BarcodeScanner.hideBackground(); // make background of WebView transparent
+  document.body.style.background = "transparent";
+  const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
+  setScanning(false);
 
+  // if the result has content
+  if (result.hasContent) {
+    setQrCode(result.content);
+    if(result.content != undefined){
+      const [shop_id, table_id] = result.content.split("-");
+      setCurrentPageDetails((prevDetails: any)=> {
+        return {
+          ...prevDetails,
+          shop_id: shop_id
+        }
+      });
+      getShopItems(shop_id);
+    }
+  }else{
+    console.log("NO CODE DETECTED");
+  }
+};
+
+const scanAndGetShopInfo = async () => {
+  setScanning(true);
+    checkPermission().then((res: any)=> {
+    res && startScanFromShops();
+  });
+}
 
 // STORAGE***************************************************
 const setOwnerToStorage = async (owner_id : string) => {
@@ -168,12 +198,7 @@ const setShopIdToStorage = async (shop_id: number) => {
     value: JSON.stringify(shop_id)
   })
 }
-const setShopNameToStorage = async (shop_name: string) =>{
-  await Storage.set({
-    key: "shop_name",
-    value: JSON.stringify(shop_name)
-  })
-}
+
 const setTableIdToStorage = async (table_id: number) => {
   await Storage.set({
     key: "table_id",
@@ -185,8 +210,6 @@ const updateTableInfo = async () => {
   setOwnerId(ownerID.value);
   const tableNo = await Storage.get({key: "table_no"});
   setTableNo(tableNo.value);
-  const shopname = (await Storage.get({key: "shop_name"})).value;
-  setShopName(shopname?.substring(1,shopname.length-1));
 }
 
 
@@ -230,7 +253,6 @@ async function tryClaimTable(){
         setTableNoToStorage(data.table.table_no);
         setTableIdToStorage(data.table.id);
         setShopIdToStorage(data.table.shop_id);
-        setShopNameToStorage(items[0] && items[0].shop)
         setClaimedToStorage(true);
         setClaimed(true);
         setScanning(false);
@@ -279,16 +301,20 @@ async function getTableFromStorageSetCurrentTableInfo(){
 
 // USE EFFECT HOOKS AND PAGE LIFE CYCLE****************************************
 React.useEffect(()=>{
-  getShopItems();
+  getShopItems(currentPageDetails.shop_id);
   syncClaimed();
+  if(shouldScan){
+    scanAndGetShopInfo();
+  }
 },[])
+
 React.useEffect(()=>{
   getAllOrderItems();
 },[items])
 
 React.useEffect(()=>{
   if(qrCode){
-    setScanning(prev=>!prev); // comment out this line if debugging on web
+    setScanning((prev: any)=>!prev); // comment out this line if debugging on web
     tryClaimTable();
   }
 },[qrCode]);
@@ -296,6 +322,7 @@ React.useEffect(()=>{
 React.useEffect(()=>{
   updateTableInfo();
   getTableFromStorageSetCurrentTableInfo();
+  getShopItems(currentPageDetails.shop_id)
 },[claimed])
 
 React.useEffect(()=>{
@@ -308,10 +335,10 @@ React.useEffect(()=>{
   }
 },[pickerValue])
 
-// to debug on web 
-function triggerQrCodeChange(){
-  setQrCode("1-2");
-}
+// // to debug on web 
+// function triggerQrCodeChange(){
+//   setQrCode("1-2");
+// }
 
 function toggleSlider(){
   setSliderActive(prevState=>!prevState);
@@ -346,8 +373,7 @@ function requestWaiter(){
 }
 async function postWaiterRequest(){
   try {
-    const { data, status } = await axios.post(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/requests",
-    //request 
+    await axios.post(rootURL+"/shops/"+shop_id+"/tables/"+table_id+"/requests",
     {
       shop_id: shop_id,
       table_id: table_id,
@@ -366,6 +392,8 @@ async function postWaiterRequest(){
     }
   }
 }
+
+
 
 return (
   <IonPage>
@@ -402,7 +430,7 @@ return (
                     allOrderItems={allOrderItemsFromServer}
                     getAllOrderItems={getAllOrderItems}
                     tableNo={tableNo}
-                    shopName={shopName}
+                    shopName={items[0] && items[0].shop}
                     claimed={claimed}
                     syncClaimed={syncClaimed}
                     updateTableInfo={updateTableInfo}/>

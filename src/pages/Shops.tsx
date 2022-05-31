@@ -6,11 +6,15 @@ import Searchbar from '../components/Searchbar';
 import ShopList from '../components/ShopList';
 //context
 import { MainContext, useContext } from '../components/Context';
+import DisplayIcon from '../components/DisplayIcon';
+import { useHistory } from 'react-router';
+import { Storage } from '@capacitor/storage';
 
 const Shops = () => {
   
-  const {rootURL, axios} = useContext(MainContext)
+  const {rootURL, axios, claimed, setClaimed, setCurrentPageDetails, setShouldScan} = useContext(MainContext);
   const [shops, setShops] = React.useState([]);
+  const history = useHistory();
 
   async function getShops() {
     try {
@@ -25,8 +29,24 @@ const Shops = () => {
       }
     }
   }
-  
+
+  const gotoOrderPageAndScan = () => {
+    setShouldScan(true);
+    setCurrentPageDetails((prevDetails: any)=>{
+      return{
+        ...prevDetails,
+        page:"/order"
+      }
+    });
+    history.push("/order");
+  }
+  const syncClaimed = async () => {
+    const claimed = await Storage.get({key: "claimed"});
+    setClaimed(claimed.value==="true");
+  }
+
   React.useEffect(()=>{
+    syncClaimed();
     getShops();
   },[])
 
@@ -38,7 +58,9 @@ const Shops = () => {
           <IonButtons>
             <IonBackButton></IonBackButton>
             <IonTitle>Shops</IonTitle>
-            
+            {!claimed && <button className="header-btn qr-btn" slot="end" onClick={gotoOrderPageAndScan}>
+            <DisplayIcon icon="qrIcon" fill="var(--ion-color-dark)"></DisplayIcon>
+          </button>}
           </IonButtons>
         </IonToolbar>
       </IonHeader>
