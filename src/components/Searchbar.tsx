@@ -15,7 +15,6 @@ export default function Searchbar(props: any){
             const finalWord = cap + lower.slice(1);
             finalQuery += finalWord + " ";
         });
-        console.log(finalQuery.slice(0,finalQuery.length))
         return finalQuery.slice(0,finalQuery.length);
     }
 
