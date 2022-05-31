@@ -11,7 +11,7 @@
 .customer{
     color: white;
 }.customer:active{
-    background: var(--ion-color-primary-tint)
+    background: var(--ion-color-tertiary)
 }
 .employee{
     top: 50%;
