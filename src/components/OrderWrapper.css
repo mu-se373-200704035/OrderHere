@@ -27,5 +27,5 @@
     transition: 50ms ease-in-out;
 }
 .order-wrapper-complete-btn:active{
-    background: var(--ion-color-primary-shade)
+    background: var(--ion-color-tertiary)
 }
